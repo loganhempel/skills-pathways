@@ -245,10 +245,10 @@ footer{border-top:1px solid var(--line);margin-top:80px;padding:46px 0;position:
 
 /* statement band */
 .statement{padding:120px 0;text-align:center;position:relative;overflow:hidden;z-index:2}
-.statement .big{font-family:var(--disp);font-weight:900;font-size:clamp(46px,11vw,160px);letter-spacing:-.045em;line-height:.9}
+.statement .big{font-family:var(--disp);font-weight:900;font-size:clamp(46px,11vw,160px);letter-spacing:-.045em;line-height:1.06}
 .statement .big .o{color:var(--lime)}
-.sline{display:block;overflow:hidden}
-.sline>span{display:block;transform:translateY(112%);transition:transform 1s var(--ease)}
+.sline{display:block;overflow:hidden;padding-bottom:.16em}
+.sline>span{display:block;transform:translateY(120%);transition:transform 1s var(--ease)}
 .statement.in .sline>span{transform:none}
 .statement .sline:nth-child(2)>span{transition-delay:.1s}
 .statement .ssub{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:34px;opacity:0;transition:opacity .8s .4s}
@@ -428,6 +428,15 @@ nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line
 .bar .s2{background:rgba(var(--lime-rgb),.55)}
 .bar .s3{background:rgba(var(--lime-rgb),.28)}
 .bar span{border-right-color:var(--bg)}
+
+/* builder right-hand block: clear spec inside the dark window (stays dark in both themes) */
+.t-body .spec-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--lime);font-weight:700;line-height:1.4;margin-bottom:2px}
+.t-body .spec{display:grid;grid-template-columns:70px 1fr;gap:14px;padding:14px 0;border-top:1px solid rgba(255,255,255,.09);align-items:start}
+.t-body .spec .sl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#8c8c83;line-height:1.5;padding-top:2px}
+.t-body .spec .sv{font-family:var(--body);font-size:13.5px;line-height:1.55;color:#dcdcd3}
+.t-body .spec .sv b{color:#fff;font-weight:700}
+.t-body .spec-ok{font-family:var(--mono);font-size:12px;color:var(--lime);line-height:1.5;margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,.09);letter-spacing:.02em}
+.t-body .spec-ok span{margin-right:7px}
 </style>
 </head>
 <body>
@@ -630,7 +639,7 @@ nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line
         <span class="bc-tag">The builder</span>
         <div class="bc-name">Logan Hempel</div>
         <div class="bc-role">Founder, Empora Group · Wellington · 18</div>
-        <p class="bc-p">Founded his first company at 15 and now runs Empora Group — a digital agency, a web &amp; product studio, and a SaaS build. He ships production web apps on Next.js and Vercel with structured data and clean analytics. <b>He isn't building for a demographic he has to research — he is the demographic.</b> That's the whole point of a youth tool built by youth.</p>
+        <p class="bc-p">Logan started his first business at 15, and today runs Empora Group: a small digital agency, a web &amp; product studio, and a SaaS build in the works. The stack this pilot needs is the one he already works in week to week — Next.js, Vercel, and a clean, structured data layer. And being 18 genuinely helps here. He isn't designing for a group he's had to study from the outside. <b>He's building for people his own age.</b></p>
         <div class="cred">
           <div class="c"><div class="cv">3 ventures</div><div class="ck">Agency · web · SaaS</div></div>
           <div class="c"><div class="cv">Live on Vercel</div><div class="ck">Apps shipped &amp; deployed</div></div>
@@ -639,16 +648,14 @@ nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line
         </div>
       </div>
       <div class="terminal">
-        <div class="t-bar"><i></i><i></i><i></i><span class="t-name">empora — yea-skills-pathways</span></div>
+        <div class="t-bar"><i></i><i></i><i></i><span class="t-name">empora — the fit</span></div>
         <div class="t-body">
-          <span class="ln"><span class="c2">~/empora · yea-skills-pathways</span></span>
-          <span class="ln"><span class="pr">$</span> stack <span class="c2">— this project</span></span>
-          <span class="ln">  <span class="k">frontend</span> → Next.js + Vercel <span class="c2">// mobile-first, edge-fast</span></span>
-          <span class="ln">  <span class="k">data</span> → structured CMS + API <span class="c2">// no Excel, no VBA</span></span>
-          <span class="ln">  <span class="k">testing</span> → youth-in-the-loop <span class="c2">// every sprint</span></span>
-          <span class="ln"><span class="pr">$</span> who <span class="c2">— building it</span></span>
-          <span class="ln">  Logan Hempel · 18 · founder, Empora Group</span>
-          <span class="ln"><span class="ok">✓</span> ready to start Phase 1 on deposit</span>
+          <div class="spec-h">What the pilot needs → what we already do</div>
+          <div class="spec"><div class="sl">Frontend</div><div class="sv">A fast, mobile-first app on <b>Next.js + Vercel</b> — the exact stack we ship on every week.</div></div>
+          <div class="spec"><div class="sl">Data</div><div class="sv">One clean, structured source with a simple CMS, in place of the Excel + VBA + PowerBI merge.</div></div>
+          <div class="spec"><div class="sl">Testing</div><div class="sv">Young people in the loop every sprint — real feedback, not a survey at the end.</div></div>
+          <div class="spec"><div class="sl">Cost</div><div class="sv">Near-free hosting, roughly <b>NZ$0–80/month</b>, with no licensing lock-in.</div></div>
+          <div class="spec-ok"><span>✓</span> Ready to start Phase 1 on deposit.</div>
         </div>
       </div>
     </div>
