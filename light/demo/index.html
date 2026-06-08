@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Skills Pathways — working prototype · Empora Ventures × YEA</title>
 <meta name="description" content="A working prototype of the youth Skills Pathways tool. Representative food & fibre data.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315803D'/%3E%3Cpath d='M7 23 L13 18 L18 20 L25 9' stroke='%23FAF8F2' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='25' cy='9' r='2.6' fill='%23FAF8F2'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#FAF8F2">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -217,9 +219,15 @@ body{background:var(--bg);color:var(--ink)}
 
 /* shell + wordmark */
 .bar{background:rgba(250,248,242,.85)}
-.wordmark{font-family:var(--disp);font-weight:900;font-size:15px;letter-spacing:-.02em;color:var(--ink);display:inline-flex;gap:.3em;align-items:baseline;line-height:1}
+.wordmark{font-family:var(--disp);font-weight:900;font-size:15px;letter-spacing:-.02em;color:var(--ink);display:inline-flex;gap:7px;align-items:center;line-height:1}
 .wordmark b{color:var(--lime);font-weight:900}
+.emark{width:20px;height:auto;flex:none;overflow:visible}
 .stp .ln{background:rgba(25,35,27,.1)}
+
+/* craft: hover affordance on interest chips (desktop) */
+@media(hover:hover){.chip:not(.sel):hover{border-color:rgba(var(--lime-rgb),.45);color:var(--ink)}}
+/* craft: match ring gets a soft halo as it fills */
+.matchring .fill{filter:drop-shadow(0 0 6px rgba(var(--lime-rgb),.35))}
 
 /* text + buttons */
 .p{color:#3d493d}
@@ -248,7 +256,7 @@ body{background:var(--bg);color:var(--ink)}
 <body>
 
 <div class="bar"><div class="bar-in">
-  <span class="wordmark" aria-label="Empora Ventures">EMPORA <b>VENTURES</b></span>
+  <span class="wordmark" aria-label="Empora Ventures"><svg class="emark" viewBox="0 0 28 22" aria-hidden="true"><path d="M2 19 L9.5 12.5 L15 15 L26 3.5" stroke="#15803D" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="2" cy="19" r="2.3" fill="#19231B"/><circle cx="9.5" cy="12.5" r="2.3" fill="#19231B"/><circle cx="15" cy="15" r="2.3" fill="#19231B"/><circle cx="26" cy="3.5" r="3" fill="#15803D"/></svg><span>EMPORA <b>VENTURES</b></span></span>
   <span class="badge">Working prototype</span>
   <button class="reset" onclick="reset()">Start over</button>
 </div></div>

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Empora Ventures × YEA — Youth Skills Pathways</title>
 <meta name="description" content="Empora Ventures' pitch to build YEA's Youth Skills Pathways digital tool.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315803D'/%3E%3Cpath d='M7 23 L13 18 L18 20 L25 9' stroke='%23FAF8F2' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='25' cy='9' r='2.6' fill='%23FAF8F2'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#15803D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -377,9 +379,14 @@ body{background:var(--bg);color:var(--ink)}
 nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line)}
 .nav-cta{background:var(--lime);color:#fff}
 .nav-cta:hover{box-shadow:0 10px 26px rgba(var(--lime-rgb),.3)}
-.wordmark{font-family:var(--disp);font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--ink);display:inline-flex;gap:.32em;align-items:baseline;line-height:1}
+.wordmark{font-family:var(--disp);font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--ink);display:inline-flex;gap:9px;align-items:center;line-height:1}
 .wordmark b{color:var(--lime);font-weight:900}
+.emark{width:25px;height:auto;flex:none;overflow:visible;transition:transform .4s var(--ease)}
+.wordmark:hover .emark{transform:translateY(-2px)}
+.emark .pk{transition:transform .5s var(--ease)}
+.wordmark:hover .emark .pk{transform:translate(1px,-2px)}
 .foot-wordmark{font-size:21px}
+.foot-wordmark .emark{width:28px}
 
 /* buttons */
 .btn-lime{background:var(--lime);color:#fff}
@@ -433,7 +440,7 @@ nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-in">
-    <a href="#" class="wordmark nav-logo" aria-label="Empora Ventures">EMPORA <b>VENTURES</b></a>
+    <a href="#" class="wordmark nav-logo" aria-label="Empora Ventures"><svg class="emark" viewBox="0 0 28 22" aria-hidden="true"><path d="M2 19 L9.5 12.5 L15 15 L26 3.5" stroke="#15803D" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="2" cy="19" r="2.3" fill="#19231B"/><circle cx="9.5" cy="12.5" r="2.3" fill="#19231B"/><circle cx="15" cy="15" r="2.3" fill="#19231B"/><circle class="pk" cx="26" cy="3.5" r="3" fill="#15803D"/></svg><span>EMPORA <b>VENTURES</b></span></a>
     <div class="nav-links">
       <a href="#opportunity">Opportunity</a>
       <a href="#product">Product</a>
@@ -479,7 +486,7 @@ nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line
 <!-- STAT TILES -->
 <section class="wrap">
   <div class="tiles">
-    <div class="tile rv"><div class="t-l">Pilot</div><div class="t-v" data-count="8" data-suffix=" mo">8 mo</div><div class="t-s">Aug 2026 → handover to YEA, Jan 2027</div></div>
+    <div class="tile rv"><div class="t-l">Pilot</div><div class="t-v" data-count="6" data-suffix=" mo">6 mo</div><div class="t-s">Aug 2026 → handover to YEA, Jan 2027</div></div>
     <div class="tile rv d1"><div class="t-l">Data</div><div class="t-v">1 source</div><div class="t-s">Replaces Excel + VBA + PowerBI merging</div></div>
     <div class="tile rv d2"><div class="t-l">Build</div><div class="t-v" data-count="19500" data-prefix="$">$19,500</div><div class="t-s">Phased — start within near-term funding</div></div>
     <div class="tile rv d3"><div class="t-l">Youth</div><div class="t-v">VUW hackathon</div><div class="t-s">Ideas + 2–3 youth testers · low cost</div></div>
@@ -763,7 +770,7 @@ nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line
 <footer>
   <div class="wrap foot-in">
     <div>
-      <span class="wordmark foot-wordmark" aria-label="Empora Ventures">EMPORA <b>VENTURES</b></span>
+      <span class="wordmark foot-wordmark" aria-label="Empora Ventures"><svg class="emark" viewBox="0 0 28 22" aria-hidden="true"><path d="M2 19 L9.5 12.5 L15 15 L26 3.5" stroke="#15803D" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="2" cy="19" r="2.3" fill="#19231B"/><circle cx="9.5" cy="12.5" r="2.3" fill="#19231B"/><circle cx="15" cy="15" r="2.3" fill="#19231B"/><circle class="pk" cx="26" cy="3.5" r="3" fill="#15803D"/></svg><span>EMPORA <b>VENTURES</b></span></span>
       <div class="foot-c" style="margin-top:14px;color:var(--muted);font-size:14px"><a href="mailto:logan@emporom.org">logan@emporom.org</a> · Wellington, Aotearoa</div>
     </div>
     <div class="foot-meta">
