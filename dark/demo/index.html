@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Skills Pathways — working prototype · Empora Ventures × YEA</title>
+<meta name="description" content="A working prototype of the youth Skills Pathways tool. Representative food & fibre data.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#15140F; --surface:#1E1B15; --surface-2:#252118; --ink:#F1EDE3; --muted:#9A968A; --faint:#6A665B;
+  --lime:#DAFF02; --lime-rgb:218,255,2; --line:rgba(241,237,227,.11);
+  --disp:'Archivo',sans-serif; --body:'Hanken Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;width:620px;height:620px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(var(--lime-rgb),.06),transparent 70%);top:-240px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:0}
+::selection{background:var(--lime);color:#15140F}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* shell */
+.bar{position:sticky;top:0;z-index:20;background:rgba(21,20,15,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:560px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.bar img{height:19px}
+.badge{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:5px 10px;border-radius:100px;font-weight:700}
+.badge::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lime);margin-right:7px;vertical-align:middle}
+.reset{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.reset:hover{color:var(--ink)}
+
+/* named stepper */
+.steps{max-width:560px;margin:0 auto;padding:16px 22px 0;display:flex;gap:7px}
+.stp{flex:1;display:flex;flex-direction:column;gap:7px}
+.stp .ln{height:3px;border-radius:100px;background:rgba(241,237,227,.10);position:relative;overflow:hidden}
+.stp .ln i{position:absolute;inset:0;width:0;background:var(--lime);transition:width .6s var(--ease)}
+.stp.done .ln i,.stp.active .ln i{width:100%}
+.stp .lb{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);transition:color .4s}
+.stp.active .lb{color:var(--lime)}.stp.done .lb{color:var(--muted)}
+.app{max-width:560px;margin:0 auto;padding:26px 22px 130px;position:relative;z-index:1}
+
+.screen{display:none;animation:fade .5s var(--ease)}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);font-weight:700;display:inline-flex;align-items:center;gap:9px}
+.kick::before{content:"";width:18px;height:1px;background:var(--lime)}
+h1{font-family:var(--disp);font-weight:900;letter-spacing:-.03em;line-height:1;font-size:clamp(34px,8vw,52px);margin-top:18px}
+h2{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;line-height:1.05;font-size:clamp(26px,6vw,38px);margin-top:14px}
+.p{color:#d2cec3;font-size:16px;margin-top:16px}.p2{color:var(--muted);font-size:14px;margin-top:8px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:14px;letter-spacing:.03em;text-transform:uppercase;font-weight:700;padding:17px 26px;border-radius:100px;transition:transform .2s var(--ease),box-shadow .2s,opacity .2s;width:100%}
+.btn-primary{background:var(--ink);color:#15140F}
+.btn-primary:active{transform:scale(.985)}
+.btn-primary:hover{box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.btn-primary:disabled{opacity:.28;pointer-events:none}
+.btn-ghost{border:1px solid var(--line);color:var(--ink);background:none;width:auto;padding:13px 20px;font-size:12px}
+.btn-ghost:hover{border-color:var(--ink)}
+.back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.back:hover{color:var(--ink)}
+.skip{display:block;text-align:center;margin-top:14px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+.skip:hover{color:var(--ink)}
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:15;background:linear-gradient(transparent,var(--bg) 34%);padding:34px 22px 24px}
+.sticky-cta .in{max-width:560px;margin:0 auto}
+.cta-count{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);text-align:center;margin-bottom:12px;height:13px;transition:color .3s}
+.cta-count b{color:var(--lime)}
+
+/* intro */
+.intro-card{margin-top:26px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--surface)}
+.istep{display:flex;gap:16px;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+.istep:last-child{border-bottom:none}
+.istep .n{font-family:var(--disp);font-weight:900;font-size:20px;color:var(--lime);width:24px;flex:none}
+.istep .t{font-weight:700;font-size:15px}
+.istep .s{color:var(--muted);font-size:13px;margin-top:2px}
+.trust{display:flex;gap:18px;margin-top:22px;flex-wrap:wrap}
+.trust span{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.trust span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--lime)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{border:1px solid var(--line);border-radius:100px;padding:13px 18px;font-size:15px;font-weight:600;color:#d8d4c9;transition:all .18s var(--ease);display:inline-flex;align-items:center;gap:9px;user-select:none}
+.chip .ic{font-size:16px;line-height:1}
+.chip .tick{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--faint);flex:none;display:grid;place-items:center;transition:all .18s}
+.chip.sel{border-color:rgba(var(--lime-rgb),.55);background:rgba(var(--lime-rgb),.07);color:var(--ink)}
+.chip.sel .tick{background:var(--lime);border-color:var(--lime)}
+.chip.sel .tick::after{content:"";width:6px;height:6px;border-radius:50%;background:#15140F}
+.chip:active{transform:scale(.96)}
+
+/* matching micro-moment */
+.matching{padding:60px 0;text-align:center}
+.matchring{width:104px;height:104px;margin:0 auto;position:relative}
+.matchring svg{transform:rotate(-90deg)}
+.matchring .track{fill:none;stroke:rgba(241,237,227,.10);stroke-width:6}
+.matchring .fill{fill:none;stroke:var(--lime);stroke-width:6;stroke-linecap:round;stroke-dasharray:295;stroke-dashoffset:295;transition:stroke-dashoffset 1.25s var(--ease)}
+.matchring.go .fill{stroke-dashoffset:60}
+.matchring .pc{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:26px;color:var(--lime)}
+.mtitle{font-family:var(--disp);font-weight:800;font-size:24px;margin-top:30px;letter-spacing:-.01em}
+.mlog{margin-top:22px;display:flex;flex-direction:column;gap:11px;max-width:330px;margin-left:auto;margin-right:auto;text-align:left}
+.mrow{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;color:var(--muted);opacity:0;transform:translateX(-6px);transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.mrow.on{opacity:1;transform:none;color:#d2cec3}
+.mrow .dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--faint);flex:none;display:grid;place-items:center;transition:all .3s}
+.mrow.on .dot{background:var(--lime);border-color:var(--lime)}
+.mrow.on .dot::after{content:"✓";color:#15140F;font-size:10px;font-weight:900}
+
+/* industry cards */
+.ind{margin-top:14px;border:1px solid var(--line);border-radius:18px;padding:22px;background:var(--surface);transition:border-color .25s,transform .25s var(--ease);width:100%;text-align:left;display:block}
+.ind:hover{border-color:rgba(241,237,227,.22);transform:translateY(-3px)}
+.ind.top1{border-color:rgba(var(--lime-rgb),.4);background:linear-gradient(160deg,rgba(var(--lime-rgb),.05),var(--surface))}
+.ind .top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.ind .name{font-family:var(--disp);font-weight:800;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+.ind .name .ic{font-size:18px}
+.ind .best{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#15140F;background:var(--lime);padding:3px 8px;border-radius:100px;font-weight:700;margin-left:2px}
+.ind .pct{font-family:var(--disp);font-weight:900;font-size:25px;color:var(--lime);line-height:1}
+.ind .pct small{font-size:10px;font-family:var(--mono);color:var(--muted);display:block;text-align:right;font-weight:500;letter-spacing:.05em;margin-top:2px}
+.ind .blurb{color:var(--muted);font-size:14px;margin-top:8px}
+.ind .why{font-size:13px;color:#cbc7bb;margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ind .why .wl{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+.ind .why .wt{border:1px solid rgba(var(--lime-rgb),.3);border-radius:100px;padding:3px 10px;font-size:12px;color:var(--ink)}
+.meter{height:5px;border-radius:100px;background:rgba(241,237,227,.08);margin-top:16px;overflow:hidden}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--lime),rgba(var(--lime-rgb),.5));width:0;transition:width 1s var(--ease)}
+.ind .meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.hiring{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--lime);display:inline-flex;align-items:center;gap:6px}
+.hiring::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.ind .go{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+
+/* role ladder */
+.ladder-cap{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:18px}
+.role{position:relative;border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:var(--surface);margin-top:12px;transition:border-color .25s,transform .25s var(--ease);width:100%;text-align:left;display:block}
+.role:hover{border-color:rgba(241,237,227,.22);transform:translateX(4px)}
+.role .lvl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--lime);font-weight:700}
+.role .rt{font-family:var(--disp);font-weight:800;font-size:19px;margin-top:6px;padding-right:30px}
+.role .ro{color:#cbc7bb;font-size:13.5px;margin-top:7px}
+.role .rpay{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:10px}
+.role .rpay b{color:var(--ink);font-weight:700}
+.role .paybar{flex:1;height:5px;border-radius:100px;background:rgba(241,237,227,.08);overflow:hidden;max-width:130px}
+.role .paybar i{display:block;height:100%;background:linear-gradient(90deg,rgba(var(--lime-rgb),.5),var(--lime));width:0;transition:width .9s var(--ease)}
+.role .go{position:absolute;right:20px;top:24px;color:var(--faint);font-size:20px;transition:color .2s,transform .2s}
+.role:hover .go{color:var(--ink);transform:translateX(3px)}
+
+/* role detail */
+.detail-h{font-family:var(--disp);font-weight:900;font-size:clamp(28px,7vw,40px);letter-spacing:-.02em;line-height:1.02;margin-top:6px}
+.dl-pay{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.03em;border:1px solid var(--line);border-radius:100px;padding:9px 14px;color:#cbc7bb}
+.pill b{color:var(--ink)}
+.pill.lime{border-color:rgba(var(--lime-rgb),.4);color:var(--lime)}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-top:30px}
+.what{color:#d2cec3;font-size:15.5px;margin-top:12px}
+.fit{margin-top:14px;border:1px solid rgba(var(--lime-rgb),.28);border-radius:16px;padding:18px 20px;background:rgba(var(--lime-rgb),.05);display:flex;gap:14px}
+.fit .fi{color:var(--lime);font-size:18px;flex:none;line-height:1.3}
+.fit .ft{font-size:14.5px;color:#e4e0d5}.fit .ft b{color:var(--lime)}
+.skills{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.skill{border:1px solid var(--line);border-radius:10px;padding:11px 15px;font-size:14px;font-weight:600;background:var(--surface);opacity:0;transform:translateY(10px);animation:pop .5s var(--ease) forwards;display:inline-flex;align-items:center;gap:8px}
+.skill.have{border-color:rgba(var(--lime-rgb),.4)}
+.skill.have::before{content:"✓";color:var(--lime);font-size:12px;font-weight:900}
+@keyframes pop{to{opacity:1;transform:none}}
+.skill-key{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:12px;display:flex;align-items:center;gap:7px}
+.skill-key b{color:var(--lime)}
+.start{margin-top:14px;border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:var(--surface);color:#d2cec3;font-size:15px;display:flex;gap:14px}
+.start .si{color:var(--lime);font-size:18px;flex:none;line-height:1.3}
+.path{margin-top:14px;border:1px solid var(--line);border-radius:18px;padding:8px 0;background:var(--surface)}
+.pnode{display:flex;align-items:center;gap:16px;padding:15px 22px;position:relative}
+.pnode .pin{width:11px;height:11px;border-radius:50%;border:2px solid var(--faint);flex:none;background:var(--bg);z-index:2}
+.pnode.here .pin{border-color:var(--lime);background:var(--lime);box-shadow:0 0 0 5px rgba(var(--lime-rgb),.16)}
+.pnode::before{content:"";position:absolute;left:26px;top:0;bottom:0;width:2px;background:var(--line);z-index:1}
+.pnode:first-child::before{top:50%}.pnode:last-child::before{bottom:50%}
+.pnode .pl{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pnode .pt{font-weight:700;font-size:16px}
+.pnode .pp{font-family:var(--mono);font-size:11px;color:var(--faint);margin-left:auto;white-space:nowrap}
+.pnode.here .pt{color:var(--lime)}
+.next{margin-top:18px;border:1px solid var(--line);border-left:3px solid var(--lime);border-radius:18px;padding:24px;background:linear-gradient(160deg,var(--surface),var(--surface-2))}
+.next .nl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--lime)}
+.next h3{font-family:var(--disp);font-weight:900;font-size:22px;margin-top:10px;letter-spacing:-.01em}
+.next p{font-size:14px;margin-top:8px;color:var(--muted)}
+
+/* your pathway summary */
+.sumcard{margin-top:20px;border:1px solid rgba(var(--lime-rgb),.3);border-radius:22px;overflow:hidden;background:linear-gradient(165deg,var(--surface),var(--surface-2))}
+.sumtop{padding:26px 24px 22px;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.sumtop::after{content:"";position:absolute;top:-60px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(var(--lime-rgb),.12),transparent 70%)}
+.sumtop .sl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);font-weight:700}
+.sumtop .si{font-family:var(--disp);font-weight:900;font-size:clamp(26px,7vw,34px);letter-spacing:-.02em;margin-top:10px;display:flex;align-items:center;gap:10px;line-height:1.05}
+.sumtop .sm{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px}.sumtop .sm b{color:var(--lime)}
+.sumrow{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--line)}
+.sumrow .rk{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);width:74px;flex:none}
+.sumrow .rv{font-weight:700;font-size:16px}
+.sumrow .rv small{display:block;font-family:var(--mono);font-weight:500;font-size:11px;color:var(--muted);margin-top:3px}
+.payjump{display:flex;align-items:center;gap:12px;padding:22px 24px;border-bottom:1px solid var(--line)}
+.payjump .pe{text-align:center}
+.payjump .pe .pv{font-family:var(--disp);font-weight:900;font-size:22px;color:var(--ink)}
+.payjump .pe.to .pv{color:var(--lime)}
+.payjump .pe .pk{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.payjump .arr{flex:1;height:2px;background:linear-gradient(90deg,var(--faint),var(--lime));position:relative}
+.payjump .arr::after{content:"▶";position:absolute;right:-4px;top:50%;transform:translateY(-50%);color:var(--lime);font-size:9px}
+.sumskills{padding:20px 24px}
+.sumskills .sk-l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.sumacts{margin-top:18px}
+.sumacts .sa-l{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:12px}
+.act{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:10px;background:var(--surface);transition:border-color .2s,transform .2s var(--ease)}
+.act:hover{border-color:rgba(var(--lime-rgb),.35);transform:translateX(3px)}
+.act .ai{width:34px;height:34px;border-radius:9px;background:rgba(var(--lime-rgb),.1);display:grid;place-items:center;flex:none;font-size:16px}
+.act .at{font-weight:700;font-size:15px}
+.act .as{color:var(--muted);font-size:12.5px;margin-top:1px}
+.act .ag{margin-left:auto;color:var(--faint);font-size:18px}
+
+.demo-note{margin-top:38px;border-top:1px solid var(--line);padding-top:18px;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.02em;line-height:1.7}
+.demo-note a{color:var(--lime)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.mrow{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <img src="empora-ventures-logo-dark.png" alt="Empora Ventures">
+  <span class="badge">Working prototype</span>
+  <button class="reset" onclick="reset()">Start over</button>
+</div></div>
+<div class="steps" id="steps">
+  <div class="stp" data-s="1"><div class="ln"><i></i></div><div class="lb">You</div></div>
+  <div class="stp" data-s="2"><div class="ln"><i></i></div><div class="lb">Industries</div></div>
+  <div class="stp" data-s="3"><div class="ln"><i></i></div><div class="lb">Pathway</div></div>
+</div>
+
+<main class="app">
+
+  <!-- 0 intro -->
+  <section class="screen on" id="s0">
+    <span class="kick">Skills Pathways · YEA</span>
+    <h1>Kia ora.<br>Let's find where <span style="color:var(--lime)">you</span> fit.</h1>
+    <p class="p">No CVs, no jargon, no idea required. Tell us what you're into, and we'll show you real food &amp; fibre industries that want you — the roles, the pay, the skills you'd build, and exactly how to get in.</p>
+    <div class="intro-card">
+      <div class="istep"><div class="n">1</div><div><div class="t">What you're into</div><div class="s">A few taps. There's no wrong answer.</div></div></div>
+      <div class="istep"><div class="n">2</div><div><div class="t">Industries that fit</div><div class="s">Where your interests are actually hiring — ranked.</div></div></div>
+      <div class="istep"><div class="n">3</div><div><div class="t">Your pathway</div><div class="s">Roles, pay, the skills you'd build, your next step.</div></div></div>
+    </div>
+    <div class="trust"><span>60 seconds</span><span>No sign-up</span><span>Mobile-first</span></div>
+    <div style="margin-top:26px"><button class="btn btn-primary" onclick="go(1)">Start →</button></div>
+    <div class="demo-note">Working prototype built by Empora Ventures for the YEA pitch. Roles, skills and pay shown are representative food &amp; fibre data for demonstration — the live tool would draw from the verified Muka Tangata dataset. <a href="../index.html">← Back to proposal</a></div>
+  </section>
+
+  <!-- 1 interests -->
+  <section class="screen" id="s1">
+    <span class="kick">Step 1 · You</span>
+    <h2>What are you into?</h2>
+    <p class="p2">Pick anything that sounds like you. Two or three is plenty.</p>
+    <div class="chips" id="chips"></div>
+    <div class="sticky-cta"><div class="in">
+      <div class="cta-count" id="s1count">&nbsp;</div>
+      <button class="btn btn-primary" id="s1btn" disabled onclick="go('1b')">Next →</button>
+    </div></div>
+  </section>
+
+  <!-- 1b strengths -->
+  <section class="screen" id="s1b">
+    <button class="back" onclick="go(1)">← Back</button>
+    <span class="kick">Step 1 · You</span>
+    <h2>And what are you good at?</h2>
+    <p class="p2">Optional — it just sharpens your matches.</p>
+    <div class="chips" id="strengths"></div>
+    <div class="sticky-cta"><div class="in">
+      <button class="btn btn-primary" onclick="runMatch()">See industries that fit me →</button>
+      <a class="skip" onclick="runMatch()">Skip this</a>
+    </div></div>
+  </section>
+
+  <!-- 1c matching micro-moment -->
+  <section class="screen" id="s1c">
+    <div class="matching">
+      <div class="matchring" id="ring">
+        <svg width="104" height="104" viewBox="0 0 104 104"><circle class="track" cx="52" cy="52" r="47"/><circle class="fill" cx="52" cy="52" r="47"/></svg>
+        <div class="pc" id="ringpc">0%</div>
+      </div>
+      <div class="mtitle">Matching you to live industries…</div>
+      <div class="mlog">
+        <div class="mrow" id="m1"><div class="dot"></div>Reading your interests</div>
+        <div class="mrow" id="m2"><div class="dot"></div>Checking who's hiring now</div>
+        <div class="mrow" id="m3"><div class="dot"></div>Ranking your best-fit pathways</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 industries -->
+  <section class="screen" id="s2">
+    <button class="back" onclick="go(1)">← Change my answers</button>
+    <span class="kick">Step 2 · Industries</span>
+    <h2>These fit you best.</h2>
+    <p class="p2">Food &amp; fibre industries that are short of people right now, ranked by how well they match you.</p>
+    <div id="indlist" style="margin-top:22px"></div>
+  </section>
+
+  <!-- 3 roles -->
+  <section class="screen" id="s3">
+    <button class="back" onclick="go(2)">← Other industries</button>
+    <span class="kick" id="s3kick">Step 3 · Pathway</span>
+    <h2 id="s3name">Roles</h2>
+    <p class="p2" id="s3blurb"></p>
+    <div class="ladder-cap"><span>Start here</span><span>Where it leads →</span></div>
+    <div id="rolelist"></div>
+  </section>
+
+  <!-- 4 detail -->
+  <section class="screen" id="s4">
+    <button class="back" id="s4back">← Other roles</button>
+    <span class="kick" id="s4lvl">Role</span>
+    <h2 class="detail-h" id="s4name">Role</h2>
+    <p class="p2" id="s4ind"></p>
+    <div class="dl-pay" id="s4pills"></div>
+    <div class="label">What you'd actually do</div>
+    <p class="what" id="s4what"></p>
+    <div id="s4fit"></div>
+    <div class="label">Skills you'd build</div>
+    <div class="skills" id="s4skills"></div>
+    <div class="skill-key" id="s4skillkey" style="display:none"><span>✓</span> <span>= a strength you already picked</span></div>
+    <div class="label">How to get started</div>
+    <div class="start"><span class="si">→</span><span id="s4start"></span></div>
+    <div class="label">Where it can lead</div>
+    <div class="path" id="s4path"></div>
+    <div class="next">
+      <div class="nl">Your next step</div>
+      <h3 id="s4next">Ready to give it a go?</h3>
+      <p>Build your pathway summary — your best-fit industry, your starter role, where it leads, and what to do next.</p>
+      <div style="margin-top:18px"><button class="btn btn-primary" id="s4plan">Build my pathway →</button></div>
+    </div>
+    <div style="margin-top:14px"><button class="btn btn-ghost" style="width:100%" onclick="go(2)">↺ Explore another industry</button></div>
+  </section>
+
+  <!-- 5 your pathway summary -->
+  <section class="screen" id="s5">
+    <span class="kick">Your pathway</span>
+    <h2>Here's where you fit.</h2>
+    <p class="p2">Built from your answers. In the live tool, you could save this or send it to a careers advisor.</p>
+    <div class="sumcard">
+      <div class="sumtop">
+        <div class="sl">Best-fit industry</div>
+        <div class="si" id="sumInd"><span class="ic"></span></div>
+        <div class="sm" id="sumMatch"></div>
+      </div>
+      <div class="sumrow"><div class="rk">Start as</div><div class="rv" id="sumStart"></div></div>
+      <div class="sumrow"><div class="rk">Grow into</div><div class="rv" id="sumGrow"></div></div>
+      <div class="payjump">
+        <div class="pe from"><div class="pv" id="sumPayFrom"></div><div class="pk">starting</div></div>
+        <div class="arr"></div>
+        <div class="pe to"><div class="pv" id="sumPayTo"></div><div class="pk">leading</div></div>
+      </div>
+      <div class="sumskills">
+        <div class="sk-l">Skills you'd build</div>
+        <div class="skills" id="sumSkills"></div>
+      </div>
+    </div>
+    <div class="sumacts">
+      <div class="sa-l">Do this next</div>
+      <div class="act"><div class="ai">📚</div><div><div class="at">Find training near you</div><div class="as">Courses &amp; certs that open the door</div></div><div class="ag">→</div></div>
+      <div class="act"><div class="ai">💼</div><div><div class="at">See live roles</div><div class="as">Real openings in this industry</div></div><div class="ag">→</div></div>
+      <div class="act"><div class="ai">💬</div><div><div class="at">Talk to someone in it</div><div class="as">A real person who does this job</div></div><div class="ag">→</div></div>
+    </div>
+    <p class="p2" style="margin-top:18px;font-family:var(--mono);font-size:11px">In the live tool these connect to real training providers, openings and people in the industry — turning a tap into a conversation.</p>
+    <div style="margin-top:22px;display:flex;gap:10px">
+      <button class="btn btn-ghost" style="flex:1" id="s5roles">← Back to roles</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="go(2)">Other industries</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn btn-primary" onclick="reset()">↺ Start over</button></div>
+  </section>
+
+</main>
+
+<script>
+const INTERESTS=[
+  {id:'outdoors',label:'Working outdoors',ic:'🌿'},{id:'animals',label:'Animals & livestock',ic:'🐄'},
+  {id:'water',label:'On the water',ic:'🌊'},{id:'machines',label:'Machines & tech',ic:'⚙️'},
+  {id:'science',label:'Science & nature',ic:'🔬'},{id:'people',label:'Working with people',ic:'🤝'},
+  {id:'hands',label:'Hands-on & practical',ic:'🔧'},{id:'problem',label:'Solving problems',ic:'🧩'},
+  {id:'food',label:'Food & how it’s made',ic:'🍇'},{id:'lead',label:'Leading & organising',ic:'🧭'}
+];
+const STRENGTHS=[
+  {id:'s_hands',tags:['hands'],label:'Good with my hands'},{id:'s_people',tags:['people'],label:'Good with people'},
+  {id:'s_tech',tags:['machines','problem'],label:'Tech & computers'},{id:'s_focus',tags:['science'],label:'Focus & detail'},
+  {id:'s_fit',tags:['outdoors'],label:'Active & physical'},{id:'s_plan',tags:['problem','lead'],label:'Organising & planning'}
+];
+// interest id -> short label for "why matched" tags
+const TAGLABEL={outdoors:'Outdoors',animals:'Animals',water:'On the water',machines:'Machines',science:'Science',people:'People',hands:'Hands-on',problem:'Problem-solving',food:'Food',lead:'Leading'};
+
+const INDUSTRIES=[
+  {id:'dairy',name:'Dairy',ic:'🐄',tags:['outdoors','animals','machines','hands','science'],hiring:'High demand',
+   blurb:'NZ’s biggest food export — and always short of people. Outdoors, animals, real progression.',
+   roles:[
+     {t:'Farm Assistant',lvl:'Entry · start here',pay:'~$50k–58k + often housing',one:'Milking, feeding out, looking after the herd — learning the farm from the ground up.',start:'No experience needed. Most start on the job; a Level 3 cert helps you stand out.',skills:[['Animal handling','animals'],['Milking systems','machines'],['Health & safety',null],['Working to a routine',null],['Teamwork','people']]},
+     {t:'Herd Manager',lvl:'Building up',pay:'~$58k–70k',one:'Running the milking, watching animal health, leading a couple of assistants.',start:'A season or two in, or a Level 4 ag qualification.',skills:[['Herd health','animals'],['Pasture & feeding','science'],['Leading a small team','people'],['Record keeping',null]]},
+     {t:'Assistant Manager (2IC)',lvl:'Leading a patch',pay:'~$70k–85k + house',one:'Second-in-charge — planning the day, managing staff, keeping the farm running.',start:'A few years’ experience plus proven leadership.',skills:[['Farm planning','problem'],['Team leadership','people'],['Animal welfare',null],['Machinery & systems','machines']]},
+     {t:'Farm Manager / Sharemilker',lvl:'Running the show',pay:'~$90k–130k + house/equity',one:'Whole-farm calls — budgets, people, production, and a path to owning stock.',start:'Senior experience or an ag degree plus a track record.',skills:[['Whole-farm management','lead'],['People management','people'],['Financial management','problem'],['Environmental compliance','science']]}
+   ]},
+  {id:'sbd',name:'Sheep, Beef & Deer',ic:'🐑',tags:['outdoors','animals','hands','machines','lead'],hiring:'High demand',
+   blurb:'Big demand for people who like being outside and working with animals.',
+   roles:[
+     {t:'Farm Assistant',lvl:'Entry · start here',pay:'~$48k–56k + often housing',one:'Feeding out, fencing, moving stock — helping run the farm day to day.',start:'No experience needed. Most start on the job; a Level 3 cert helps you stand out.',skills:[['Animal handling','animals'],['Fencing & maintenance','hands'],['Health & safety',null],['Quad & ute operation','machines'],['Following a plan',null]]},
+     {t:'Stock Person',lvl:'Building up',pay:'~$55k–68k',one:'Looking after animal health, working dogs, managing a mob.',start:'A season or two in, or a Level 4 ag qualification.',skills:[['Stock management','animals'],['Animal health',null],['Dog handling','animals'],['Pasture basics','science'],['Record keeping',null]]},
+     {t:'Stock Manager',lvl:'Leading a patch',pay:'~$70k–88k + house',one:'Running a block, planning grazing, leading a small team.',start:'A few years’ experience plus proven leadership.',skills:[['Livestock planning','problem'],['Team leadership','people'],['Animal welfare compliance',null],['Budgeting basics',null]]},
+     {t:'Farm Manager',lvl:'Running the show',pay:'~$90k–120k + house/vehicle',one:'Whole-farm decisions — budgets, people, the environment plan.',start:'Senior experience or an ag degree plus a track record.',skills:[['Whole-farm planning','lead'],['People management','people'],['Financial management','problem'],['Environmental compliance','science']]}
+   ]},
+  {id:'hort',name:'Horticulture',ic:'🍏',tags:['outdoors','science','hands','machines','food'],hiring:'Growing fast',
+   blurb:'Kiwifruit, apples, veg — fast-growing, hands-on, with a real tech side.',
+   roles:[
+     {t:'Orchard / Field Hand',lvl:'Entry · start here',pay:'~$48k–56k',one:'Pruning, thinning, picking and packing — working with the growing season.',start:'Seasonal start, no experience needed.',skills:[['Plant & crop care','science'],['Working to the season',null],['Hand tools','hands'],['Quality picking','food'],['Teamwork','people']]},
+     {t:'Crop Technician',lvl:'Building up',pay:'~$56k–68k',one:'Monitoring crop health, irrigation and spray timing, keeping records.',start:'On-job training or a Level 4 hort cert.',skills:[['Crop monitoring','science'],['Irrigation basics','machines'],['Pest & disease ID','problem'],['Data & record keeping',null]]},
+     {t:'Orchard Manager',lvl:'Leading a patch',pay:'~$70k–90k',one:'Planning the season, leading crews, hitting yield and quality targets.',start:'A few seasons plus proven leadership.',skills:[['Season planning','problem'],['Team leadership','people'],['Quality systems','food'],['Budgeting',null]]},
+     {t:'Operations Manager',lvl:'Running the show',pay:'~$95k–125k',one:'Running a whole site — people, packhouse, compliance and budgets.',start:'Senior experience or a hort/agribusiness degree.',skills:[['Operations management','lead'],['People management','people'],['Compliance','science'],['Financial management','problem']]}
+   ]},
+  {id:'wine',name:'Wine & Grapes',ic:'🍷',tags:['outdoors','science','hands','people','food'],hiring:'Seasonal demand',
+   blurb:'From the vineyard to the cellar — seasonal, hands-on, a bit of science.',
+   roles:[
+     {t:'Vineyard Hand',lvl:'Entry · start here',pay:'~$48k–56k',one:'Pruning, training vines, driving tractors, working the season.',start:'Seasonal start, no experience needed.',skills:[['Pruning & canopy work','hands'],['Machinery basics','machines'],['Working to the season',null],['Teamwork','people'],['Health & safety',null]]},
+     {t:'Cellar Hand',lvl:'Building up',pay:'~$55k–66k',one:'Bringing in the harvest, running pumps, keeping it spotless.',start:'A vintage or two, or a Level 4 cert.',skills:[['Harvest operations','food'],['Hygiene & sanitation',null],['Pumping & racking','machines'],['Lab basics','science']]},
+     {t:'Assistant Winemaker',lvl:'Getting technical',pay:'~$65k–82k',one:'Monitoring ferments, lab work, helping shape the wine.',start:'Cellar experience plus a wine-science qualification.',skills:[['Fermentation monitoring','science'],['Lab analysis','science'],['Blending support','food'],['Quality control',null]]},
+     {t:'Winemaker',lvl:'Leading production',pay:'~$90k–130k',one:'Owning the style, planning production, leading the cellar.',start:'A wine-science degree plus years in the cellar.',skills:[['Wine style & blending','food'],['Production planning','lead'],['Team leadership','people'],['Compliance',null]]}
+   ]},
+  {id:'aqua',name:'Aquaculture',ic:'🐟',tags:['water','science','animals','machines','hands'],hiring:'Growing fast',
+   blurb:'Mussels, oysters and salmon — work on the water and in the hatchery.',
+   roles:[
+     {t:'Marine Farm Assistant',lvl:'Entry · start here',pay:'~$50k–58k',one:'Out on the boat — handling mussel and oyster lines and gear.',start:'No experience needed; safety tickets are provided.',skills:[['Deckhand skills','water'],['Stock handling','animals'],['Safety at sea',null],['Equipment maintenance','machines'],['Teamwork','people']]},
+     {t:'Hatchery Technician',lvl:'Building up',pay:'~$56k–70k',one:'Rearing larvae, checking water quality, keeping it biosecure.',start:'On-job training or a Level 4 aquaculture cert.',skills:[['Water-quality monitoring','science'],['Larvae rearing','animals'],['Biosecurity',null],['Record keeping',null]]},
+     {t:'Vessel Operator',lvl:'On the water',pay:'~$70k–90k',one:'Skippering the farm boat, navigating, leading the deck crew.',start:'Sea time plus a skipper ticket.',skills:[['Skipper basics','water'],['Navigation','problem'],['Crew coordination','people'],['Maintenance','machines']]},
+     {t:'Farm Supervisor',lvl:'Leading a site',pay:'~$85k–110k',one:'Running a marine farm — production, people, compliance.',start:'Senior experience or an aquaculture qualification.',skills:[['Production planning','lead'],['Team leadership','people'],['Biosecurity compliance',null],['Budgeting',null]]}
+   ]},
+  {id:'irr',name:'Irrigation',ic:'💧',tags:['machines','outdoors','problem','hands'],hiring:'High demand',
+   blurb:'Design, install and fix the systems that keep the country growing.',
+   roles:[
+     {t:'Irrigation Installer',lvl:'Entry · start here',pay:'~$50k–60k',one:'Laying pipe, reading plans, building systems on site.',start:'No experience needed; tickets and training on the job.',skills:[['Pipe laying','hands'],['Reading plans','problem'],['Hand & power tools','machines'],['Health & safety',null],['Teamwork','people']]},
+     {t:'Service Technician',lvl:'Building up',pay:'~$60k–75k',one:'Diagnosing faults, servicing pumps, keeping farms watered.',start:'Mechanical or electrical aptitude plus on-job training.',skills:[['Fault diagnosis','problem'],['Pump & motor servicing','machines'],['Electrical basics',null],['Customer service','people']]},
+     {t:'Irrigation Designer',lvl:'Getting technical',pay:'~$75k–95k',one:'Designing systems, sizing pumps, planning water efficiency.',start:'Trade experience plus design training or a relevant cert.',skills:[['System design','problem'],['Hydraulics','science'],['CAD basics','machines'],['Water-use efficiency','science']]},
+     {t:'Project Manager',lvl:'Leading projects',pay:'~$90k–120k',one:'Running installs end to end — clients, crews, budgets.',start:'Senior trade plus project experience.',skills:[['Project planning','lead'],['Client management','people'],['Budgeting',null],['Compliance',null]]}
+   ]}
+];
+
+let picks=new Set(), strengthPicks=new Set(), curInd=null, curRoleIdx=0, ranked=[];
+
+function buildChips(wrap,items,store,onChange){
+  items.forEach(it=>{
+    const b=document.createElement('button'); b.className='chip'; b.dataset.id=it.id;
+    b.innerHTML=(it.ic?'<span class="ic">'+it.ic+'</span>':'')+'<span class="tick"></span>'+it.label;
+    b.onclick=()=>{ b.classList.toggle('sel'); b.classList.contains('sel')?store.add(it.id):store.delete(it.id); onChange&&onChange(); };
+    wrap.appendChild(b);
+  });
+}
+function s1change(){
+  const n=picks.size;
+  document.getElementById('s1btn').disabled=n===0;
+  const c=document.getElementById('s1count');
+  c.innerHTML = n===0 ? 'Tap what sounds like you' : '<b>'+n+'</b> picked — tap Next when you’re ready';
+}
+buildChips(document.getElementById('chips'),INTERESTS,picks,s1change);
+buildChips(document.getElementById('strengths'),STRENGTHS,strengthPicks,null);
+
+function setStep(step){
+  document.querySelectorAll('#steps .stp').forEach(d=>{const s=+d.dataset.s;d.classList.remove('done','active');if(s<step)d.classList.add('done');else if(s===step)d.classList.add('active');});
+}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById('s'+id).classList.add('on');window.scrollTo({top:0});}
+function go(n){
+  show(n);
+  const map={0:0,1:1,'1b':1,'1c':2,2:2,3:3,4:3,5:3};
+  setStep(map[n]);
+}
+
+function allTags(){
+  const t=new Set(picks);
+  STRENGTHS.forEach(s=>{ if(strengthPicks.has(s.id)) s.tags.forEach(x=>t.add(x)); });
+  return t;
+}
+function matchedTags(ind,tags){return ind.tags.filter(t=>tags.has(t));}
+function score(ind,tags){
+  const m=matchedTags(ind,tags).length;
+  const a=tags.size? m/tags.size:0, b=m/ind.tags.length;
+  let pct=Math.round((a*0.6+b*0.4)*100);
+  pct=Math.max(pct, m>0?54:26);
+  return Math.min(pct,98);
+}
+function rank(){
+  const tags=allTags();
+  ranked=INDUSTRIES.map(i=>({i,p:score(i,tags),why:matchedTags(i,tags)})).sort((a,b)=>b.p-a.p);
+  return ranked;
+}
+
+// matching micro-moment
+function runMatch(){
+  rank();
+  go('1c');
+  const ring=document.getElementById('ring'), pc=document.getElementById('ringpc');
+  const target=ranked[0]?ranked[0].p:80;
+  setTimeout(()=>ring.classList.add('go'),60);
+  const t0=performance.now(),dur=1150;
+  (function tick(n){let pr=Math.min((n-t0)/dur,1);pr=1-Math.pow(1-pr,3);pc.textContent=Math.round(target*pr)+'%';if(pr<1)requestAnimationFrame(tick);})(t0);
+  setTimeout(()=>document.getElementById('m1').classList.add('on'),250);
+  setTimeout(()=>document.getElementById('m2').classList.add('on'),650);
+  setTimeout(()=>document.getElementById('m3').classList.add('on'),1050);
+  setTimeout(renderIndustries,1650);
+}
+function renderIndustries(){
+  const list=document.getElementById('indlist'); list.innerHTML='';
+  ranked.forEach(({i,p,why},idx)=>{
+    const el=document.createElement('button'); el.className='ind'+(idx===0?' top1':'');
+    const whyHtml = why.length ? '<div class="why"><span class="wl">Because you like</span>'+why.slice(0,3).map(t=>'<span class="wt">'+TAGLABEL[t]+'</span>').join('')+'</div>' : '';
+    el.innerHTML='<div class="top"><div class="name"><span class="ic">'+i.ic+'</span>'+i.name+(idx===0?'<span class="best">Best fit</span>':'')+'</div><div class="pct">'+p+'%<small>match</small></div></div>'+
+      '<div class="blurb">'+i.blurb+'</div>'+whyHtml+'<div class="meter"><i></i></div>'+
+      '<div class="meta"><span class="hiring">'+i.hiring+'</span><span class="go">'+i.roles.length+' roles · explore →</span></div>';
+    el.onclick=()=>openIndustry(i.id);
+    list.appendChild(el);
+    setTimeout(()=>el.querySelector('.meter i').style.width=p+'%',140+idx*110);
+  });
+  go(2);
+}
+function payLow(p){const m=p.match(/\$(\d+)k/);return m?'$'+m[1]+'k':p;}
+function openIndustry(id){
+  curInd=INDUSTRIES.find(x=>x.id===id);
+  document.getElementById('s3name').textContent=curInd.name;
+  document.getElementById('s3blurb').textContent='A real ladder — most people start at the top of this list and grow into the rest. Tap any role.';
+  const list=document.getElementById('rolelist'); list.innerHTML='';
+  const n=curInd.roles.length;
+  curInd.roles.forEach((r,idx)=>{
+    const el=document.createElement('button'); el.className='role';
+    const fill=Math.round(25+(idx/(n-1))*75);
+    el.innerHTML='<div class="lvl">'+r.lvl+'</div><div class="rt">'+r.t+'</div><div class="ro">'+r.one+'</div>'+
+      '<div class="rpay">Pay <b>'+r.pay+'</b><span class="paybar"><i></i></span></div><div class="go">→</div>';
+    el.onclick=()=>openRole(idx);
+    list.appendChild(el);
+    setTimeout(()=>el.querySelector('.paybar i').style.width=fill+'%',180+idx*110);
+  });
+  go(3);
+}
+function openRole(idx){
+  curRoleIdx=idx;
+  const r=curInd.roles[idx], tags=allTags();
+  document.getElementById('s4lvl').textContent=r.lvl;
+  document.getElementById('s4name').textContent=r.t;
+  document.getElementById('s4ind').textContent='In '+curInd.name;
+  document.getElementById('s4pills').innerHTML='<span class="pill">Pay <b>'+r.pay+'</b></span><span class="pill lime">'+curInd.hiring+'</span>';
+  document.getElementById('s4what').textContent=r.one;
+  // "why you'd suit this" from matched interests
+  const why=matchedTags(curInd,tags);
+  const fit=document.getElementById('s4fit');
+  fit.innerHTML = why.length ? '<div class="fit"><span class="fi">✦</span><span class="ft">You’d suit this — it lines up with your interest in <b>'+why.slice(0,3).map(t=>TAGLABEL[t].toLowerCase()).join('</b>, <b>')+'</b>.</span></div>' : '';
+  // skills, marking ones the user already has as a strength
+  const sk=document.getElementById('s4skills'); sk.innerHTML=''; let haveAny=false;
+  r.skills.forEach((s,i)=>{
+    const [name,tag]=s; const have=tag&&tags.has(tag); if(have)haveAny=true;
+    const t=document.createElement('span');t.className='skill'+(have?' have':'');t.style.animationDelay=(i*55)+'ms';t.textContent=name;sk.appendChild(t);
+  });
+  document.getElementById('s4skillkey').style.display=haveAny?'flex':'none';
+  document.getElementById('s4start').textContent=r.start;
+  const path=document.getElementById('s4path'); path.innerHTML='';
+  curInd.roles.forEach((rr,i)=>{
+    const node=document.createElement('div'); node.className='pnode'+(i===idx?' here':'');
+    node.innerHTML='<div class="pin"></div><div><div class="pl">'+rr.lvl+'</div><div class="pt">'+rr.t+'</div></div><div class="pp">'+payLow(rr.pay)+'</div>';
+    path.appendChild(node);
+  });
+  const nxt=curInd.roles[idx+1];
+  document.getElementById('s4next').textContent=nxt?('Next up: '+nxt.t):'You’d be running the show.';
+  document.getElementById('s4back').onclick=()=>go(3);
+  document.getElementById('s4plan').onclick=()=>buildSummary(idx);
+  show(4); setStep(3);
+}
+function buildSummary(idx){
+  const tags=allTags(), r=curInd.roles[idx], last=curInd.roles[curInd.roles.length-1];
+  const top=ranked.find(x=>x.i.id===curInd.id);
+  document.getElementById('sumInd').innerHTML='<span class="ic">'+curInd.ic+'</span>'+curInd.name;
+  document.getElementById('sumMatch').innerHTML=(top?'<b>'+top.p+'% match</b> · ':'')+curInd.hiring;
+  document.getElementById('sumStart').innerHTML=r.t+'<small>'+r.lvl+'</small>';
+  document.getElementById('sumGrow').innerHTML=last.t+'<small>'+last.lvl+'</small>';
+  document.getElementById('sumPayFrom').textContent=payLow(r.pay);
+  document.getElementById('sumPayTo').textContent=payLow(last.pay);
+  // top skills from the starter role, "have" highlighted
+  const sumSk=document.getElementById('sumSkills'); sumSk.innerHTML='';
+  r.skills.slice(0,4).forEach((s,i)=>{const [name,tag]=s;const have=tag&&tags.has(tag);const el=document.createElement('span');el.className='skill'+(have?' have':'');el.style.animationDelay=(i*55)+'ms';el.textContent=name;sumSk.appendChild(el);});
+  document.getElementById('s5roles').onclick=()=>openIndustry(curInd.id);
+  show(5); setStep(3);
+}
+function reset(){
+  picks.clear();strengthPicks.clear();
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('s1btn').disabled=true; s1change();
+  document.getElementById('ring').classList.remove('go');
+  document.querySelectorAll('.mrow').forEach(m=>m.classList.remove('on'));
+  go(0);
+}
+setStep(0); s1change();
+</script>
+</body>
+</html>
