@@ -252,6 +252,74 @@ body{background:var(--bg);color:var(--ink)}
 
 /* pathway pin sits on cream */
 .pnode .pin{background:var(--bg)}
+
+/* ============================================================
+   HOME (intro) — flagship redesign
+   warm cream · aurora depth · a pathway you climb · one CTA
+   ============================================================ */
+#s0{position:relative}
+.home{position:relative;z-index:1}
+
+/* soft drifting aurora behind the hero */
+.home-aura{position:absolute;left:-26px;right:-26px;top:-30px;height:380px;z-index:0;pointer-events:none;overflow:hidden}
+.home-aura span{position:absolute;border-radius:50%;filter:blur(58px);opacity:.34;animation:drift 16s ease-in-out infinite}
+.home-aura span:nth-child(1){width:230px;height:230px;background:radial-gradient(circle,rgba(var(--lime-rgb),.7),transparent 70%);top:-50px;left:-20px}
+.home-aura span:nth-child(2){width:190px;height:190px;background:radial-gradient(circle,rgba(224,138,43,.55),transparent 70%);top:30px;right:-30px;animation-delay:-6s}
+.home-aura span:nth-child(3){width:170px;height:170px;background:radial-gradient(circle,rgba(var(--lime-rgb),.45),transparent 70%);top:150px;left:42%;animation-delay:-10s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(12px,-10px) scale(1.07)}66%{transform:translate(-9px,9px) scale(.95)}}
+
+/* eyebrow */
+.home-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--lime);font-weight:700;opacity:0;animation:hrise .7s var(--ease) .05s forwards}
+.home-eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 4px rgba(var(--lime-rgb),.13)}
+
+/* headline — staggered lines */
+.home-h{font-family:var(--disp);font-weight:900;letter-spacing:-.035em;line-height:.98;font-size:clamp(38px,12vw,54px);margin-top:15px;color:var(--ink)}
+.home-h span{display:block;opacity:0;transform:translateY(14px);animation:hrise .8s var(--ease) forwards}
+.home-h span:nth-child(1){animation-delay:.12s}
+.home-h span:nth-child(2){animation-delay:.22s}
+.home-h span:nth-child(3){animation-delay:.32s}
+.home-h .hl{position:relative;color:var(--lime);font-style:normal}
+.home-h .hl::after{content:"";position:absolute;left:-2px;right:-3px;bottom:.08em;height:.13em;background:rgba(var(--lime-rgb),.24);border-radius:3px;z-index:-1;transform:scaleX(0);transform-origin:left;animation:hlw .6s var(--ease) .7s forwards}
+@keyframes hlw{to{transform:scaleX(1)}}
+
+.home-sub{font-size:15px;line-height:1.55;color:#3d493d;margin-top:15px;max-width:33ch;opacity:0;animation:hrise .8s var(--ease) .44s forwards}
+
+/* the pathway you climb (replaces the boxy step list) */
+.path-hero{position:relative;margin-top:28px}
+.path-hero::before{content:"";position:absolute;left:13px;top:8px;bottom:10px;width:2px;border-radius:2px;background:linear-gradient(180deg,transparent,rgba(var(--lime-rgb),.55) 13%,rgba(var(--lime-rgb),.55) 82%,transparent);transform:scaleY(0);transform-origin:top;animation:grow .9s var(--ease) .55s forwards}
+@keyframes grow{to{transform:scaleY(1)}}
+.ph{position:relative;display:flex;gap:15px;align-items:flex-start;padding:9px 0;opacity:0;transform:translateX(-8px);animation:hrise2 .7s var(--ease) forwards}
+.ph:nth-child(2){animation-delay:.64s}.ph:nth-child(3){animation-delay:.78s}.ph:nth-child(4){animation-delay:.92s}
+@keyframes hrise2{to{opacity:1;transform:none}}
+.ph .dot{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;background:#fff;border:2px solid rgba(var(--lime-rgb),.45);font-family:var(--mono);font-size:11px;font-weight:700;color:var(--lime);position:relative;z-index:1}
+.ph.dest .dot{background:var(--lime);border-color:var(--lime);color:#fff;font-size:13px;box-shadow:0 0 0 6px rgba(var(--lime-rgb),.13);animation:pulse 2.6s ease-in-out 1.3s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 6px rgba(var(--lime-rgb),.13)}50%{box-shadow:0 0 0 11px rgba(var(--lime-rgb),.04)}}
+.ph .pc{padding-top:1px}
+.ph .pc .pk{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.ph .pc .pt{font-family:var(--disp);font-weight:800;font-size:16.5px;color:var(--ink);line-height:1.1;margin-top:3px;letter-spacing:-.01em}
+.ph.dest .pc .pt{color:var(--lime)}
+.ph .pc .pd{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.45;max-width:30ch}
+
+/* CTA */
+.home-cta{margin-top:30px;width:100%;display:flex;align-items:center;justify-content:center;gap:11px;font-family:var(--mono);font-size:13.5px;letter-spacing:.03em;text-transform:uppercase;font-weight:700;color:#fff;background:linear-gradient(118deg,#1a9152,#15803D 62%);border-radius:100px;padding:18px 24px;box-shadow:0 14px 30px -10px rgba(var(--lime-rgb),.55);position:relative;overflow:hidden;opacity:0;animation:hrise .7s var(--ease) 1.02s forwards;transition:transform .2s var(--ease),box-shadow .2s}
+.home-cta:hover{transform:translateY(-2px);box-shadow:0 20px 40px -10px rgba(var(--lime-rgb),.62)}
+.home-cta:active{transform:translateY(0) scale(.99)}
+.home-cta .arr{transition:transform .25s var(--ease);font-size:15px}
+.home-cta:hover .arr{transform:translateX(5px)}
+.home-cta::after{content:"";position:absolute;top:0;left:-65%;width:42%;height:100%;background:linear-gradient(110deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-20deg);animation:sheen 1.1s ease-in-out 1.7s 1}
+@keyframes sheen{to{left:150%}}
+
+.home-trust{display:flex;gap:16px;flex-wrap:wrap;margin-top:15px;opacity:0;animation:hrise .7s var(--ease) 1.16s forwards}
+.home-trust span{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.home-trust span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--lime)}
+
+@keyframes hrise{to{opacity:1;transform:none}}
+
+/* accessibility: if reduced motion, show everything statically */
+@media(prefers-reduced-motion:reduce){
+  .home-eyebrow,.home-h span,.home-sub,.path-hero::before,.ph,.home-cta,.home-trust,.home-h .hl::after{opacity:1!important;transform:none!important;animation:none!important}
+}
+.pnode .pin{background:var(--bg)}
 </style>
 </head>
 <body>
@@ -271,17 +339,20 @@ body{background:var(--bg);color:var(--ink)}
 
   <!-- 0 intro -->
   <section class="screen on" id="s0">
-    <span class="kick">Skills Pathways · YEA</span>
-    <h1>Kia ora.<br>Let's find where <span style="color:var(--lime)">you</span> fit.</h1>
-    <p class="p">No CVs, no jargon, no idea required. Tell us what you're into, and we'll show you real food &amp; fibre industries that want you — the roles, the pay, the skills you'd build, and exactly how to get in.</p>
-    <div class="intro-card">
-      <div class="istep"><div class="n">1</div><div><div class="t">What you're into</div><div class="s">A few taps. There's no wrong answer.</div></div></div>
-      <div class="istep"><div class="n">2</div><div><div class="t">Industries that fit</div><div class="s">Where your interests are actually hiring — ranked.</div></div></div>
-      <div class="istep"><div class="n">3</div><div><div class="t">Your pathway</div><div class="s">Roles, pay, the skills you'd build, your next step.</div></div></div>
+    <div class="home-aura" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="home">
+      <span class="home-eyebrow"><i></i>Skills Pathways · for YEA rangatahi</span>
+      <h1 class="home-h"><span>Kia ora.</span><span>Let's find where</span><span><em class="hl">you</em> fit.</span></h1>
+      <p class="home-sub">Tell us what you're into. We'll show you real food &amp; fibre work that wants you — the roles, the pay, and exactly how to get in.</p>
+      <div class="path-hero">
+        <div class="ph"><div class="dot">1</div><div class="pc"><div class="pk">Start</div><div class="pt">What you're into</div><div class="pd">A few taps — there's no wrong answer.</div></div></div>
+        <div class="ph"><div class="dot">2</div><div class="pc"><div class="pk">Explore</div><div class="pt">Industries that fit you</div><div class="pd">Where your interests are actually hiring, ranked.</div></div></div>
+        <div class="ph dest"><div class="dot">★</div><div class="pc"><div class="pk">Arrive</div><div class="pt">Your pathway</div><div class="pd">Real roles, pay, the skills you'd build, and your next step.</div></div></div>
+      </div>
+      <button class="home-cta" onclick="go(1)"><span>Start — it takes a minute</span><i class="arr">→</i></button>
+      <div class="home-trust"><span>60 seconds</span><span>No sign-up</span><span>Just tap</span></div>
+      <div class="demo-note">Working prototype built by Empora Ventures for the YEA pitch. Roles, skills and pay shown are representative food &amp; fibre data for demonstration — the live tool would draw from the verified Muka Tangata dataset. <a href="../index.html">← Back to proposal</a></div>
     </div>
-    <div class="trust"><span>60 seconds</span><span>No sign-up</span><span>Mobile-first</span></div>
-    <div style="margin-top:26px"><button class="btn btn-primary" onclick="go(1)">Start →</button></div>
-    <div class="demo-note">Working prototype built by Empora Ventures for the YEA pitch. Roles, skills and pay shown are representative food &amp; fibre data for demonstration — the live tool would draw from the verified Muka Tangata dataset. <a href="../index.html">← Back to proposal</a></div>
   </section>
 
   <!-- 1 interests -->
