@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empora Ventures × YEA — Youth Skills Pathways</title>
+<meta name="description" content="Empora Ventures' pitch to build YEA's Youth Skills Pathways digital tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#15140F; --bg-2:#191712; --surface:#1E1B15; --surface-2:#252118;
+  --ink:#F1EDE3; --muted:#9A968A; --faint:#6A665B;
+  --lime:#DAFF02; --lime-rgb:218,255,2; --lime-soft:rgba(218,255,2,.08);
+  --line:rgba(241,237,227,.11); --line-2:rgba(241,237,227,.055);
+  --disp:'Archivo',sans-serif; --body:'Hanken Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--lime);color:#000}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* grain + atmosphere */
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.glow{position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none;opacity:.5}
+.glow.a{width:620px;height:620px;background:radial-gradient(circle,rgba(var(--lime-rgb),.16),transparent 70%);top:-220px;right:-160px}
+.glow.b{width:520px;height:520px;background:radial-gradient(circle,rgba(60,80,255,.10),transparent 70%);top:60vh;left:-220px}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);font-weight:700;display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--lime);display:inline-block}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;line-height:1.02}
+.lime{color:var(--lime)}
+.section{padding:118px 0;position:relative;z-index:2}
+.section-h2{font-size:clamp(30px,4.4vw,58px);margin-top:20px;max-width:18ch}
+.lead{font-size:clamp(16px,1.5vw,19px);color:#cfcfc7;margin-top:22px;max-width:62ch}
+.sub{color:var(--muted)}
+.divider{height:1px;background:var(--line);width:100%}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:all .4s var(--ease);padding:22px 0}
+nav.scrolled{padding:12px 0;background:rgba(11,11,12,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{height:26px;width:auto}
+.nav-links{display:flex;gap:30px;align-items:center}
+.nav-links a{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:color .25s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;background:var(--lime);color:#000;padding:11px 18px;border-radius:100px;transition:transform .25s var(--ease),box-shadow .25s}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(var(--lime-rgb),.25)}
+@media(max-width:860px){.nav-links{display:none}}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:120px;padding-bottom:60px;position:relative}
+.hero-eyebrow{opacity:0;transform:translateY(18px);animation:rise .8s var(--ease) .1s forwards}
+.hero h1{font-size:clamp(42px,7.4vw,104px);font-weight:900;margin-top:26px;letter-spacing:-.035em;line-height:.98}
+.hero h1 span{display:block;opacity:0;transform:translateY(28px);animation:rise .9s var(--ease) forwards}
+.hero h1 span:nth-child(1){animation-delay:.18s}.hero h1 span:nth-child(2){animation-delay:.30s}.hero h1 span:nth-child(3){animation-delay:.42s}
+.hero-sub{font-size:clamp(16px,1.6vw,20px);color:#cfcfc7;max-width:60ch;margin-top:30px;opacity:0;animation:rise .9s var(--ease) .56s forwards}
+.hero-cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap;opacity:0;animation:rise .9s var(--ease) .68s forwards}
+.btn{font-family:var(--mono);font-size:13px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;padding:15px 26px;border-radius:100px;transition:transform .25s var(--ease),background .25s,box-shadow .25s;display:inline-flex;align-items:center;gap:9px}
+.btn-lime{background:var(--lime);color:#000}
+.btn-lime:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(var(--lime-rgb),.28)}
+.btn-ghost{border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--lime);color:var(--lime);transform:translateY(-2px)}
+.hero-meta{display:flex;gap:38px;margin-top:54px;flex-wrap:wrap;opacity:0;animation:rise .9s var(--ease) .8s forwards}
+.hero-meta .m-l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.hero-meta .m-v{font-size:14px;font-weight:600;margin-top:5px}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* marquee */
+.marquee{margin-top:64px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;white-space:nowrap;opacity:0;animation:rise .9s var(--ease) .9s forwards}
+.marquee-track{display:inline-flex;gap:42px;animation:scroll 28s linear infinite}
+.marquee-track span{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:42px}
+.marquee-track span::after{content:"✦";color:var(--lime)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* ===== STAT TILES ===== */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-50px;position:relative;z-index:3}
+.tile{background:linear-gradient(160deg,var(--surface),var(--bg-2));border:1px solid var(--line);border-radius:18px;padding:26px 24px;transition:border-color .3s,transform .3s var(--ease)}
+.tile:hover{border-color:rgba(var(--lime-rgb),.4);transform:translateY(-4px)}
+.tile .t-l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.tile .t-v{font-family:var(--disp);font-size:38px;font-weight:800;letter-spacing:-.03em;margin-top:14px;line-height:1}
+.tile .t-s{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.4}
+@media(max-width:860px){.tiles{grid-template-columns:repeat(2,1fr);margin-top:30px}}
+@media(max-width:520px){.tiles{grid-template-columns:1fr}}
+
+/* ===== generic grid cards ===== */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
+@media(max-width:860px){.cards-3{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px 26px;transition:border-color .3s,transform .35s var(--ease);position:relative;overflow:hidden}
+.card:hover{border-color:rgba(var(--lime-rgb),.35);transform:translateY(-4px)}
+.card .num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--lime)}
+.card h3{font-size:21px;margin-top:18px;font-weight:800}
+.card p{color:var(--muted);font-size:15px;margin-top:12px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@media(max-width:860px){.two-col{grid-template-columns:1fr;gap:34px}}
+.challenge{display:flex;gap:18px;padding:22px 0;border-top:1px solid var(--line)}
+.challenge:last-child{border-bottom:1px solid var(--line)}
+.challenge .c-n{font-family:var(--mono);font-size:12px;color:var(--lime);font-weight:700;padding-top:3px;flex:none}
+.challenge h4{font-size:17px;font-weight:800;font-family:var(--disp)}
+.challenge p{color:var(--muted);font-size:14px;margin-top:6px}
+
+.pull{margin-top:54px;background:linear-gradient(135deg,var(--surface),var(--bg-2));border:1px solid var(--line);border-left:3px solid var(--lime);border-radius:16px;padding:34px 38px}
+.pull p{font-size:clamp(18px,2vw,24px);font-family:var(--disp);font-weight:700;letter-spacing:-.01em;line-height:1.3}
+.pull .by{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:16px}
+
+/* journey */
+.journey{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:50px;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.jstep{padding:38px 30px;border-right:1px solid var(--line);position:relative;transition:background .35s}
+.jstep:last-child{border-right:none}
+.jstep:hover{background:var(--surface)}
+.jstep .js-n{font-family:var(--disp);font-size:60px;font-weight:900;color:rgba(255,255,255,.06);line-height:.8;letter-spacing:-.04em}
+.jstep .js-tag{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-top:-26px;position:relative}
+.jstep h3{font-size:24px;margin-top:18px;font-weight:800}
+.jstep p{color:var(--muted);font-size:14.5px;margin-top:12px}
+.jstep .arrow{position:absolute;top:46px;right:-10px;color:var(--lime);font-size:18px;z-index:4}
+@media(max-width:860px){.journey{grid-template-columns:1fr}.jstep{border-right:none;border-bottom:1px solid var(--line)}.jstep .arrow{display:none}}
+.principles{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.chip{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:#d6d6cf;border:1px solid var(--line);border-radius:100px;padding:9px 16px;transition:border-color .25s,color .25s}
+.chip:hover{border-color:var(--lime);color:var(--lime)}
+.chip.x{color:var(--faint)}.chip.x::before{content:"✕ ";color:var(--faint)}
+.success{margin-top:34px;background:var(--lime-soft);border-radius:14px;padding:26px 30px;font-size:clamp(16px,1.7vw,20px);font-family:var(--disp);font-weight:700;letter-spacing:-.01em;line-height:1.35}
+.success b{color:var(--lime)}
+
+/* architecture */
+.arch{display:flex;align-items:stretch;gap:0;margin-top:48px;flex-wrap:wrap}
+.anode{flex:1;min-width:210px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 24px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.anode.mid{background:var(--lime);color:#000;flex:.78;border-color:var(--lime)}
+.anode .a-c{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.anode.mid .a-c{color:rgba(0,0,0,.55)}
+.anode .a-n{font-family:var(--disp);font-size:22px;font-weight:800;margin-top:8px}
+.anode .a-s{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.4}
+.anode.mid .a-s{color:rgba(0,0,0,.7)}
+.aflow{align-self:center;color:var(--lime);font-size:22px;padding:0 14px;flex:none}
+@media(max-width:860px){.arch{flex-direction:column}.aflow{transform:rotate(90deg);padding:8px 0}}
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:14px}
+@media(max-width:860px){.tech-grid{grid-template-columns:1fr}}
+.tech{padding:26px 30px 26px 0;border-top:1px solid var(--line)}
+.tech h4{font-size:16px;font-weight:800;font-family:var(--disp);display:flex;align-items:center;gap:10px}
+.tag{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--lime-soft);color:var(--lime);padding:3px 9px;border-radius:100px}
+.tech p{color:var(--muted);font-size:14px;margin-top:10px}
+.tech p b{color:var(--ink)}
+
+/* youth — lime feature band */
+.band{background:var(--lime);color:#000;border-radius:28px;padding:64px 56px;position:relative;overflow:hidden}
+.band .eyebrow{color:#000}.band .eyebrow::before{background:#000}
+.band h2{font-size:clamp(28px,4vw,52px);margin-top:20px;color:#000}
+.band .lead{color:rgba(0,0,0,.78);max-width:60ch}
+.yrole{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+@media(max-width:860px){.yrole{grid-template-columns:1fr}.band{padding:44px 30px}}
+.yr h4{font-size:18px;font-weight:800;font-family:var(--disp);border-top:2px solid #000;padding-top:14px}
+.yr p{color:rgba(0,0,0,.72);font-size:14.5px;margin-top:10px}
+.fund{margin-top:40px;background:#000;color:var(--lime);border-radius:16px;padding:26px 32px;font-size:16px;line-height:1.5}
+.fund b{color:#fff}
+
+/* timeline */
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+@media(max-width:860px){.phases{grid-template-columns:1fr}}
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px 26px;transition:border-color .3s,transform .35s var(--ease)}
+.phase:hover{border-color:rgba(var(--lime-rgb),.35);transform:translateY(-4px)}
+.phase .p-n{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);font-weight:700}
+.phase h3{font-size:21px;margin-top:8px;font-weight:800}
+.phase .p-d{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+.phase p{color:var(--muted);font-size:14px;margin-top:16px;line-height:1.5}
+.bar{margin-top:30px;display:flex;height:10px;border-radius:100px;overflow:hidden;border:1px solid var(--line)}
+.bar span{flex:1;border-right:1px solid var(--bg)}
+.bar span:last-child{border:none}
+.bar .s1{background:var(--lime)}.bar .s2{background:rgba(var(--lime-rgb),.6)}.bar .s3{background:rgba(60,80,255,.55)}
+.bar-l{display:flex;justify-content:space-between;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.tl-note{margin-top:24px;display:flex;gap:12px;align-items:center;color:var(--muted);font-size:14px}
+.tl-note .d{width:8px;height:8px;border-radius:50%;background:var(--lime);flex:none}
+
+/* investment */
+.inv{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:48px}
+@media(max-width:860px){.inv{grid-template-columns:1fr}}
+.inv-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:34px 32px}
+.inv-card.alt{background:linear-gradient(160deg,rgba(var(--lime-rgb),.08),var(--bg-2));border-color:rgba(var(--lime-rgb),.25)}
+.inv-card .ic-l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.inv-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;border-bottom:1px solid var(--line-2)}
+.inv-row .r-t{font-size:15px}.inv-row .r-t small{display:block;color:var(--faint);font-size:12px;margin-top:3px}
+.inv-row .r-v{font-family:var(--disp);font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.inv-row.total{border-bottom:none;border-top:2px solid var(--ink);margin-top:6px;padding-top:18px}
+.inv-row.total .r-v{color:var(--lime);font-size:26px}
+.inv-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:28px}
+@media(max-width:620px){.inv-meta{grid-template-columns:1fr}}
+.inv-meta .im{padding:20px 22px 0 0;border-top:1px solid var(--line)}
+.inv-meta .im-l{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:8px}
+.inv-meta .im p{color:var(--muted);font-size:13px;line-height:1.5}
+.gst{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:22px;letter-spacing:.03em}
+
+/* why us */
+.why{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:46px}
+@media(max-width:620px){.why{grid-template-columns:1fr}}
+.wu{display:flex;gap:16px;padding:26px 30px 26px 0;border-top:1px solid var(--line)}
+.wu .w-n{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--lime);flex:none;padding-top:3px}
+.wu h4{font-size:19px;font-weight:800;font-family:var(--disp)}
+.wu p{color:var(--muted);font-size:14.5px;margin-top:8px}
+.gov{margin-top:40px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px 34px}
+.gov .g-l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:14px}
+.gov p{color:#cfcfc7;font-size:15.5px;line-height:1.6}.gov p b{color:#fff}
+
+/* footer CTA */
+.cta{padding:120px 0 70px;text-align:center;position:relative;z-index:2}
+.cta h2{font-size:clamp(34px,6vw,82px);font-weight:900;letter-spacing:-.035em;line-height:.98;max-width:16ch;margin:0 auto}
+.cta .lead{margin:30px auto 0;text-align:center}
+.cta-row{display:flex;gap:14px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:80px;text-align:left}
+@media(max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.steps{grid-template-columns:1fr}}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 22px}
+.step .s-n{font-family:var(--disp);font-size:26px;font-weight:900;color:var(--lime)}
+.step p{font-size:13.5px;color:var(--muted);margin-top:12px;line-height:1.45}
+footer{border-top:1px solid var(--line);margin-top:80px;padding:46px 0;position:relative;z-index:2}
+.foot-in{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px}
+.foot-logo{height:30px}
+.foot-c a{color:var(--lime)}
+.foot-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:right;line-height:1.8}
+
+/* progress + cursor */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--lime);z-index:99;box-shadow:0 0 14px rgba(var(--lime-rgb),.6);transition:width .08s linear}
+.cursor{position:fixed;width:26px;height:26px;border:1px solid rgba(var(--lime-rgb),.7);border-radius:50%;pointer-events:none;z-index:90;transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),background .25s,opacity .3s;left:-100px;top:-100px}
+.cursor.big{width:70px;height:70px;background:rgba(var(--lime-rgb),.14);border-color:transparent}
+@media(hover:none),(max-width:860px){.cursor{display:none}}
+
+/* hero blueprint */
+.blueprint{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.6;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:66px 66px;mask-image:radial-gradient(circle at 72% 26%,#000,transparent 72%);-webkit-mask-image:radial-gradient(circle at 72% 26%,#000,transparent 72%)}
+.scanline{position:absolute;left:0;right:0;height:160px;z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(var(--lime-rgb),.045),transparent);animation:scan 8s linear infinite}
+@keyframes scan{0%{top:-180px}100%{top:110%}}
+
+/* statement band */
+.statement{padding:120px 0;text-align:center;position:relative;overflow:hidden;z-index:2}
+.statement .big{font-family:var(--disp);font-weight:900;font-size:clamp(46px,11vw,160px);letter-spacing:-.045em;line-height:.9}
+.statement .big .o{color:var(--lime)}
+.sline{display:block;overflow:hidden}
+.sline>span{display:block;transform:translateY(112%);transition:transform 1s var(--ease)}
+.statement.in .sline>span{transform:none}
+.statement .sline:nth-child(2)>span{transition-delay:.1s}
+.statement .ssub{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:34px;opacity:0;transition:opacity .8s .4s}
+.statement.in .ssub{opacity:1}.statement .ssub b{color:var(--lime)}
+
+/* builder */
+.builder-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;margin-top:46px}
+@media(max-width:860px){.builder-grid{grid-template-columns:1fr;gap:24px}}
+.builder-card{background:linear-gradient(160deg,var(--surface),var(--bg-2));border:1px solid var(--line);border-radius:24px;padding:38px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.bc-tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.bc-name{font-family:var(--disp);font-weight:900;font-size:clamp(28px,3.4vw,40px);letter-spacing:-.025em;margin-top:12px;line-height:1}
+.bc-role{color:var(--muted);font-size:14px;margin-top:8px}
+.bc-p{color:#cfcfc7;font-size:15px;margin-top:20px;line-height:1.6}
+.bc-p b{color:#fff}
+.cred{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:auto;padding-top:28px}
+.cred .c{border:1px solid var(--line);border-radius:14px;padding:16px 18px;transition:border-color .3s}
+.cred .c:hover{border-color:rgba(var(--lime-rgb),.4)}
+.cred .cv{font-family:var(--disp);font-weight:800;font-size:18px;color:var(--lime);line-height:1.1}
+.cred .ck{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.terminal{background:#08080A;border:1px solid var(--line);border-radius:20px;overflow:hidden;font-family:var(--mono);font-size:13.5px;display:flex;flex-direction:column}
+.t-bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line);background:#0D0D0F}
+.t-bar i{width:11px;height:11px;border-radius:50%;background:#2a2a2e}.t-bar i:first-child{background:var(--lime)}
+.t-bar .t-name{margin-left:8px;color:var(--faint);font-size:11px;letter-spacing:.04em}
+.t-body{padding:24px;line-height:2;color:#cfcfc7;flex:1}
+.t-body .pr{color:var(--lime)}.t-body .k{color:#fff}.t-body .c2{color:var(--faint)}.t-body .ok{color:var(--lime)}
+.t-body .ln{display:block;opacity:0;transform:translateX(-8px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.builder-grid.in .t-body .ln{opacity:1;transform:none}
+.t-body .ln:nth-child(2){transition-delay:.15s}.t-body .ln:nth-child(3){transition-delay:.3s}.t-body .ln:nth-child(4){transition-delay:.45s}.t-body .ln:nth-child(5){transition-delay:.6s}.t-body .ln:nth-child(6){transition-delay:.75s}.t-body .ln:nth-child(7){transition-delay:.9s}.t-body .ln:nth-child(8){transition-delay:1.05s}
+
+/* SVG schematics */
+.schematic{margin-top:46px;border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at 50% -10%,rgba(var(--lime-rgb),.05),transparent 55%),var(--bg-2);padding:30px 26px;overflow:hidden;opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.schematic.in{opacity:1;transform:none}
+.schematic .s-cap{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:6px;display:block}
+.schematic .s-note{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+.schematic svg{width:100%;height:auto;display:block;margin-top:10px;overflow:visible}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.5s var(--ease) .2s}
+.schematic.in .draw{stroke-dashoffset:0}
+.flow{opacity:0;transition:opacity .5s 1.2s}.schematic.in .flow{opacity:1}
+.n-box{fill:#161619;stroke:var(--line);stroke-width:1}
+.n-lime{fill:var(--lime)}
+.s-lab{font-family:var(--mono);font-weight:700;fill:var(--ink);font-size:15px}
+.s-lab.mid{fill:#000}
+.s-small{font-family:var(--mono);fill:var(--muted);font-size:11px;letter-spacing:.02em}
+.s-small.mid{fill:rgba(0,0,0,.6)}
+
+/* timeline bar fill */
+.bar span{transform-origin:left;transform:scaleX(0);transition:transform .8s var(--ease)}
+.rv.in .bar span{transform:none}
+.rv.in .bar .s2{transition-delay:.25s}.rv.in .bar .s3{transition-delay:.45s}
+
+/* prototype embed */
+.proto{display:grid;grid-template-columns:auto 1fr;gap:54px;align-items:center;margin-top:48px}
+@media(max-width:760px){.proto{grid-template-columns:1fr;justify-items:center;gap:34px}}
+.phone{width:310px;height:638px;border-radius:44px;border:1px solid var(--line);background:#000;padding:11px;box-shadow:0 50px 110px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.04),0 0 80px rgba(var(--lime-rgb),.05);flex:none;position:relative}
+.phone::after{content:"";position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:108px;height:4px;border-radius:100px;background:rgba(255,255,255,.25);z-index:3}
+.phone iframe{width:100%;height:100%;border:none;border-radius:34px;background:var(--bg);display:block}
+.proto-side h3{font-family:var(--disp);font-weight:800;font-size:clamp(26px,3vw,34px);letter-spacing:-.02em}
+.proto-side>p{color:var(--muted);margin-top:12px;font-size:16px}
+.proto-list{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:13px}
+.proto-list li{padding-left:24px;position:relative;color:#cfcfc7;font-size:15px}
+.proto-list li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--lime)}
+
+/* pricing justification */
+.pricepanel{margin-top:26px;border:1px solid var(--line);border-radius:20px;padding:32px 34px;background:linear-gradient(160deg,var(--surface),var(--bg-2))}
+.pp-l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);font-weight:700}
+.pp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+@media(max-width:760px){.pp-grid{grid-template-columns:1fr}}
+.pp-v{font-family:var(--disp);font-weight:900;font-size:30px;color:var(--lime);letter-spacing:-.02em;line-height:1}
+.pp-k{color:var(--muted);font-size:13px;margin-top:10px;line-height:1.45}
+.pp-note{color:#cfcfc7;font-size:14.5px;margin-top:24px;line-height:1.65}.pp-note b{color:#fff}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.schematic,.sline>span,.statement .ssub{opacity:1!important;transform:none!important}.cursor,.scanline{display:none!important}}
+
+/* ===== restrained-dark reskin ===== */
+.btn-lime{background:var(--ink);color:#15140F}
+.btn-lime:hover{box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.nav-cta{background:var(--ink);color:#15140F}
+.nav-cta:hover{box-shadow:0 10px 26px rgba(0,0,0,.45)}
+nav.scrolled{background:rgba(21,20,15,.78)}
+.statement .big .o{color:var(--ink)}
+.band{background:linear-gradient(160deg,var(--surface),var(--bg-2));color:var(--ink);border:1px solid var(--line);border-left:3px solid var(--lime)}
+.band .eyebrow{color:var(--lime)}
+.band .eyebrow::before{background:var(--lime)}
+.band h2{color:var(--ink)}
+.band .lead{color:#cbc7bb}
+.yr h4{border-top:1px solid var(--lime);color:var(--ink)}
+.yr p{color:var(--muted)}
+.fund{background:rgba(0,0,0,.24);color:#cbc7bb;border:1px solid var(--line)}
+.fund b{color:var(--lime)}
+.n-lime{fill:var(--ink)}
+.s-lab.mid{fill:#15140F}.s-small.mid{fill:rgba(21,20,15,.6)}
+.inv-card.alt{background:var(--surface);border-color:var(--line);border-left:3px solid var(--lime)}
+.inv-row.total .r-v{color:var(--ink)}
+.pp-v{color:var(--ink)}
+.tile .t-v{color:var(--ink)}
+.success{background:rgba(var(--lime-rgb),.06);border:1px solid var(--line)}
+.glow.a{opacity:.34}
+.glow.b{opacity:.26;background:radial-gradient(circle,rgba(150,135,80,.12),transparent 70%)}
+.grain{opacity:.06}
+
+/* ============================================================
+   FRESH FIELD — light theme
+   warm cream · deep ink · fresh growth-green · honey amber
+   (cascade override — wins over everything above)
+   ============================================================ */
+:root{
+  --bg:#FAF8F2; --bg-2:#F3F0E6; --surface:#FFFFFF; --surface-2:#F6F2E8;
+  --ink:#19231B; --muted:#5C6A5C; --faint:#8B968A;
+  --lime:#15803D; --lime-rgb:21,128,61; --lime-soft:rgba(21,128,61,.07);
+  --line:rgba(25,35,27,.12); --line-2:rgba(25,35,27,.07);
+  --amber:#E08A2B;
+}
+body{background:var(--bg);color:var(--ink)}
+::selection{background:var(--lime);color:#fff}
+
+/* atmosphere */
+.grain{opacity:.03;mix-blend-mode:multiply}
+.glow.a{background:radial-gradient(circle,rgba(var(--lime-rgb),.13),transparent 70%);opacity:.55}
+.glow.b{background:radial-gradient(circle,rgba(224,138,43,.12),transparent 70%);opacity:.5}
+.blueprint{background-image:linear-gradient(rgba(25,35,27,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(25,35,27,.05) 1px,transparent 1px)}
+
+/* secondary text (was light-grey on dark) -> readable on cream */
+.lead,.hero-sub,.gov p,.bc-p,.proto-list li,.pp-note,.band .lead,.fund{color:#3d493d}
+.gov p b,.bc-p b,.pp-note b{color:var(--ink)}
+.chip{color:#41513f}
+
+/* nav + wordmark */
+nav.scrolled{background:rgba(250,248,242,.82);border-bottom:1px solid var(--line)}
+.nav-cta{background:var(--lime);color:#fff}
+.nav-cta:hover{box-shadow:0 10px 26px rgba(var(--lime-rgb),.3)}
+.wordmark{font-family:var(--disp);font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--ink);display:inline-flex;gap:.32em;align-items:baseline;line-height:1}
+.wordmark b{color:var(--lime);font-weight:900}
+.foot-wordmark{font-size:21px}
+
+/* buttons */
+.btn-lime{background:var(--lime);color:#fff}
+.btn-lime:hover{box-shadow:0 14px 34px rgba(var(--lime-rgb),.3)}
+
+/* journey ghost number + statement */
+.jstep .js-n{color:rgba(25,35,27,.07)}
+.statement .big .o{color:var(--lime)}
+
+/* youth band -> clean light card */
+.band{background:linear-gradient(160deg,#fff,var(--bg-2));color:var(--ink);border:1px solid var(--line);border-left:3px solid var(--lime)}
+.yr h4{border-top:1px solid var(--lime);color:var(--ink)}
+.yr p{color:var(--muted)}
+.fund{background:var(--lime-soft);color:#3d493d;border:1px solid var(--line)}
+.fund b{color:var(--lime)}
+
+/* architecture + SVG schematics (recolour inline lime strokes) */
+.anode.mid{background:var(--lime);color:#fff}
+.anode.mid .a-c{color:rgba(255,255,255,.7)}
+.anode.mid .a-s{color:rgba(255,255,255,.85)}
+.schematic .draw{stroke:var(--lime)}
+.schematic .flow{fill:var(--lime)}
+.n-box{fill:#fff;stroke:var(--line)}
+.n-lime{fill:var(--lime)}
+.s-lab{fill:var(--ink)}
+.s-lab.mid{fill:#fff}
+.s-small.mid{fill:rgba(255,255,255,.82)}
+
+/* investment + stats */
+.inv-card.alt{background:#fff;border-color:var(--line);border-left:3px solid var(--lime)}
+.inv-row.total{border-top:2px solid var(--ink)}
+.inv-row.total .r-v{color:var(--lime)}
+.tile .t-v{color:var(--ink)}
+.pp-v{color:var(--lime)}
+.success{background:var(--lime-soft);border:1px solid var(--line)}
+.success b{color:var(--lime)}
+
+/* timeline bar — keep the final phase in the green family (was blue) */
+.bar .s2{background:rgba(var(--lime-rgb),.55)}
+.bar .s3{background:rgba(var(--lime-rgb),.28)}
+.bar span{border-right-color:var(--bg)}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="grain"></div>
+<div class="glow a"></div>
+<div class="glow b"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#" class="wordmark nav-logo" aria-label="Empora Ventures">EMPORA <b>VENTURES</b></a>
+    <div class="nav-links">
+      <a href="#opportunity">Opportunity</a>
+      <a href="#product">Product</a>
+      <a href="#prototype">Prototype</a>
+      <a href="#build">Build</a>
+      <a href="#youth">Youth</a>
+      <a href="#investment">Investment</a>
+    </div>
+    <a href="#contact" class="nav-cta">Book a call</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="blueprint"></div>
+  <div class="scanline"></div>
+  <div class="wrap">
+    <span class="eyebrow hero-eyebrow">Proposal — YEA × Empora Ventures</span>
+    <h1>
+      <span>Turn a skills framework</span>
+      <span>into a pathway youth</span>
+      <span>actually follow<i style="font-style:normal;color:var(--lime)">.</i></span>
+    </h1>
+    <p class="hero-sub">Our pitch to design and build the youth-facing tool for YEA's Food &amp; Fibre Skills Pathways pilot — the backend, the frontend, and a youth-engagement programme — a VUW hackathon and a small youth core — that reaches the rangatahi the tool is built for.</p>
+    <div class="hero-cta">
+      <a href="demo/index.html" target="_blank" rel="noopener" class="btn btn-lime">▶ Try the live prototype</a>
+      <a href="#prototype" class="btn btn-ghost">See it in the page ↓</a>
+    </div>
+    <div class="hero-meta">
+      <div><div class="m-l">Prepared for</div><div class="m-v">YEA · Emma Godwin</div></div>
+      <div><div class="m-l">Prepared by</div><div class="m-v">Logan Hempel · Empora Ventures</div></div>
+      <div><div class="m-l">Pilot</div><div class="m-v">Aug 2026 → Jan 2027</div></div>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>Youth-led&nbsp;</span><span>Mobile-first&nbsp;</span><span>Plain language&nbsp;</span><span>Reaches NEETs&nbsp;</span><span>Built to scale&nbsp;</span><span>Next.js · Vercel&nbsp;</span>
+        <span>Youth-led&nbsp;</span><span>Mobile-first&nbsp;</span><span>Plain language&nbsp;</span><span>Reaches NEETs&nbsp;</span><span>Built to scale&nbsp;</span><span>Next.js · Vercel&nbsp;</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STAT TILES -->
+<section class="wrap">
+  <div class="tiles">
+    <div class="tile rv"><div class="t-l">Pilot</div><div class="t-v" data-count="8" data-suffix=" mo">8 mo</div><div class="t-s">Aug 2026 → handover to YEA, Jan 2027</div></div>
+    <div class="tile rv d1"><div class="t-l">Data</div><div class="t-v">1 source</div><div class="t-s">Replaces Excel + VBA + PowerBI merging</div></div>
+    <div class="tile rv d2"><div class="t-l">Build</div><div class="t-v" data-count="19500" data-prefix="$">$19,500</div><div class="t-s">Phased — start within near-term funding</div></div>
+    <div class="tile rv d3"><div class="t-l">Youth</div><div class="t-v">VUW hackathon</div><div class="t-s">Ideas + 2–3 youth testers · low cost</div></div>
+  </div>
+</section>
+
+<!-- OPPORTUNITY -->
+<section class="section" id="opportunity">
+  <div class="wrap">
+    <span class="eyebrow rv">01 — The opportunity</span>
+    <h2 class="section-h2 rv">The hard part is already done. The last mile is missing.</h2>
+    <div class="two-col" style="margin-top:42px">
+      <div>
+        <p class="lead rv" style="margin-top:0">Muka Tangata and industry have built something real — a skills-first dataset across four food &amp; fibre industries: roles, the skills each needs, how they cluster, how they transfer. It's a genuine asset, and it should be protected.</p>
+        <p class="lead rv d1" style="margin-top:18px">The problem isn't the data. It's the delivery. PowerBI was built to display information for industry — not to guide a 15-year-old. This pilot's real job is the translation layer: same trusted data, rebuilt into a guided experience a young person can use with zero instruction.</p>
+      </div>
+      <div class="rv d1">
+        <div class="challenge"><div class="c-n">01</div><div><h4>Built to display, not to guide</h4><p>A wall of filters and workforce jargon. For youth, it's the opposite of inviting — they bounce.</p></div></div>
+        <div class="challenge"><div class="c-n">02</div><div><h4>Fragile underneath</h4><p>Per-industry Excel workbooks merged by VBA macros. It breaks the moment you add a fifth industry.</p></div></div>
+        <div class="challenge"><div class="c-n">03</div><div><h4>One tool, every audience</h4><p>Employers, career-changers and youth need different things. Serving everyone at once serves no one.</p></div></div>
+      </div>
+    </div>
+    <div class="pull rv">
+      <p>We're the only bidder already inside the room. Logan is your Youth Lead — so the people building the tool are the same people who bring the young testers, <span class="lime">including the NEETs it exists to reach.</span></p>
+      <div class="by">Empora Ventures · Empora Group</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="section" id="product" style="background:var(--bg-2)">
+  <div class="wrap">
+    <span class="eyebrow rv">02 — The product</span>
+    <h2 class="section-h2 rv">A guided journey, not a dashboard.</h2>
+    <p class="lead rv">Lead the user step by step, reveal complexity in layers, and never make them understand a framework before they can use the tool. One clear path — three moves.</p>
+    <div class="journey rv">
+      <div class="jstep"><div class="js-n">01</div><div class="js-tag">Start here</div><h3>Self-awareness</h3><p>They name what they're into and already good at — plain language, zero skills jargon. We meet them where they are.</p><span class="arrow">→</span></div>
+      <div class="jstep"><div class="js-n">02</div><div class="js-tag">Open up</div><h3>Industry exploration</h3><p>We surface industries hiring now that fit them, and the real roles inside — drawn straight from the trusted data.</p><span class="arrow">→</span></div>
+      <div class="jstep"><div class="js-n">03</div><div class="js-tag">Move forward</div><h3>Career pathways</h3><p>They see how skills build over time toward a role — and the journey ends on a real next step, not a dead-end list.</p></div>
+    </div>
+    <div class="principles rv d1">
+      <span class="chip">Mobile-first</span><span class="chip">Plain language</span><span class="chip">Progressive disclosure</span><span class="chip">Ends in action</span>
+      <span class="chip x">Gimmicky gamification</span><span class="chip x">Framework-first</span>
+    </div>
+    <div class="success rv d1">The bar for done: a young person uses it with <b>no instruction</b> and leaves knowing what they're good at, which industries want them, and exactly what to do next.</div>
+  </div>
+</section>
+
+<!-- PROTOTYPE -->
+<section class="section" id="prototype" style="background:var(--bg-2)">
+  <div class="wrap">
+    <span class="eyebrow rv">02.5 — See it working</span>
+    <h2 class="section-h2 rv">This isn't a mockup. It already runs.</h2>
+    <p class="lead rv">We built a working prototype of the guided journey for this pitch. Pick what you're into, see the industries that fit, follow the pathway. Representative food &amp; fibre data today — the verified Muka Tangata dataset tomorrow.</p>
+    <div class="proto rv">
+      <div class="phone"><iframe src="demo/index.html" title="Skills Pathways prototype" loading="lazy"></iframe></div>
+      <div class="proto-side">
+        <h3>Try it yourself — right here.</h3>
+        <p>60 seconds, no sign-up. It's live on your phone in the frame beside this, or full-screen below.</p>
+        <a href="demo/index.html" target="_blank" rel="noopener" class="btn btn-lime" style="width:auto;margin-top:20px">Open the prototype ↗</a>
+        <ul class="proto-list">
+          <li>The full journey — self-awareness → ranked industries → pathway</li>
+          <li>Live match scoring that shows <em>why</em> each industry fits you</li>
+          <li>Pay that grows along the ladder, and the skills you'd build — with the ones you already have ticked off</li>
+          <li>Ends on a saveable "your pathway" plan with a real next step</li>
+          <li>Built in days — proof the production version is no leap</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD -->
+<section class="section" id="build">
+  <div class="wrap">
+    <span class="eyebrow rv">03 — How we'll build it</span>
+    <h2 class="section-h2 rv">Configurable where it should be. Custom where it counts.</h2>
+    <p class="lead rv">You asked for the balance between custom build and configurable tools. Here it is — a no-code layer for the data and content, a custom build for the youth experience, where the journey <em>is</em> the product.</p>
+    <div class="schematic">
+      <span class="s-cap">The data, structured</span>
+      <svg viewBox="0 0 1120 300" role="img" aria-label="Relational data model: roles linked to industries, skills, clusters and levels">
+        <path id="dm1" class="draw" pathLength="1" d="M485 145 L286 90" stroke="#DAFF02" stroke-width="1.5" fill="none" opacity=".75"/>
+        <path id="dm2" class="draw" pathLength="1" d="M635 145 L834 90" stroke="#DAFF02" stroke-width="1.5" fill="none" opacity=".75"/>
+        <path id="dm3" class="draw" pathLength="1" d="M485 169 L286 224" stroke="#DAFF02" stroke-width="1.5" fill="none" opacity=".75"/>
+        <path id="dm4" class="draw" pathLength="1" d="M635 169 L834 224" stroke="#DAFF02" stroke-width="1.5" fill="none" opacity=".75"/>
+        <circle class="flow" r="3.5" fill="#DAFF02"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#dm1"/></animateMotion></circle>
+        <circle class="flow" r="3.5" fill="#DAFF02"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#dm2"/></animateMotion></circle>
+        <circle class="flow" r="3.5" fill="#DAFF02"><animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#dm3"/></animateMotion></circle>
+        <circle class="flow" r="3.5" fill="#DAFF02"><animateMotion dur="2.8s" repeatCount="indefinite"><mpath href="#dm4"/></animateMotion></circle>
+        <g><rect class="n-box" x="126" y="58" width="160" height="52" rx="12"/><text class="s-lab" x="206" y="90" text-anchor="middle">INDUSTRY</text></g>
+        <g><rect class="n-box" x="834" y="58" width="160" height="52" rx="12"/><text class="s-lab" x="914" y="90" text-anchor="middle">SKILLS</text></g>
+        <g><rect class="n-box" x="126" y="200" width="160" height="52" rx="12"/><text class="s-lab" x="206" y="232" text-anchor="middle">CLUSTERS</text></g>
+        <g><rect class="n-box" x="834" y="200" width="160" height="52" rx="12"/><text class="s-lab" x="914" y="232" text-anchor="middle">LEVELS</text></g>
+        <rect class="n-lime" x="483" y="130" width="154" height="56" rx="14"/>
+        <text class="s-lab mid" x="560" y="164" text-anchor="middle">ROLE</text>
+      </svg>
+      <div class="s-note">One relational source of truth. Add an industry by adding linked records — not by merging another spreadsheet.</div>
+    </div>
+
+    <div class="schematic">
+      <span class="s-cap">System architecture</span>
+      <svg viewBox="0 0 1120 220" role="img" aria-label="Architecture: data and CMS to API layer to youth app">
+        <path id="ar1" class="draw" pathLength="1" d="M322 110 L418 110" stroke="#DAFF02" stroke-width="1.6" fill="none"/>
+        <path id="ar2" class="draw" pathLength="1" d="M702 110 L798 110" stroke="#DAFF02" stroke-width="1.6" fill="none"/>
+        <circle class="flow" r="4" fill="#DAFF02"><animateMotion dur="1.7s" repeatCount="indefinite"><mpath href="#ar1"/></animateMotion></circle>
+        <circle class="flow" r="4" fill="#DAFF02"><animateMotion dur="1.7s" begin="0.3s" repeatCount="indefinite"><mpath href="#ar2"/></animateMotion></circle>
+        <g><rect class="n-box" x="42" y="64" width="280" height="92" rx="18"/><text class="s-lab" x="182" y="104" text-anchor="middle">DATA + CMS</text><text class="s-small" x="182" y="130" text-anchor="middle">No-code · spreadsheet-style</text></g>
+        <g><rect class="n-lime" x="420" y="64" width="280" height="92" rx="18"/><text class="s-lab mid" x="560" y="104" text-anchor="middle">API LAYER</text><text class="s-small mid" x="560" y="130" text-anchor="middle">Cached · no rebuilds</text></g>
+        <g><rect class="n-box" x="798" y="64" width="280" height="92" rx="18"/><text class="s-lab" x="938" y="104" text-anchor="middle">YOUTH APP</text><text class="s-small" x="938" y="130" text-anchor="middle">Next.js · Vercel · mobile-first</text></g>
+      </svg>
+      <div class="s-note">Data updates reach the app with no developer and no rebuild — so the pilot iterates continuously, every sprint.</div>
+    </div>
+    <div class="tech-grid">
+      <div class="tech rv"><h4><span class="tag">Backend</span> Single source of truth</h4><p>One structured, relational store replaces the Excel + VBA + manual-merge pipeline. Adding a new industry is adding linked records — no model rebuild, no corruption risk.</p></div>
+      <div class="tech rv d1"><h4><span class="tag">Frontend</span> The youth experience</h4><p>Custom-built, because off-the-shelf can't deliver a guided journey that converts. Next.js on Vercel — the stack we run daily — quick to iterate between testing rounds.</p></div>
+      <div class="tech rv"><h4><span class="tag">CMS</span> Run by non-technical staff</h4><p>Your team edits text, roles, industries and descriptions in a familiar, spreadsheet-style interface. No code, no deployment, no way to break the live app.</p></div>
+      <div class="tech rv d1"><h4><span class="tag">Cost</span> Lean by design</h4><p>Runs on near-free hosting and a low-cost data tier — roughly <b>NZ$0–80/month</b> across the pilot. No enterprise platform, no heavy licensing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<section class="statement" id="statement">
+  <div class="wrap">
+    <div class="big">
+      <span class="sline"><span>Built by youth.</span></span>
+      <span class="sline"><span class="o">For youth.</span></span>
+    </div>
+    <p class="ssub">An 18-year-old founder + a youth core from a VUW hackathon, building for 13–30s. <b>The empathy is structural — not researched.</b></p>
+  </div>
+</section>
+
+<!-- BUILDER -->
+<section class="section" id="builder">
+  <div class="wrap">
+    <span class="eyebrow rv">Who's building it</span>
+    <h2 class="section-h2 rv">Your developer already ships production software.</h2>
+    <p class="lead rv">This isn't a learning exercise on YEA's budget. It's built by someone who designs, builds and deploys real web apps for paying clients — on the exact stack this pilot runs on.</p>
+    <div class="builder-grid">
+      <div class="builder-card">
+        <span class="bc-tag">The builder</span>
+        <div class="bc-name">Logan Hempel</div>
+        <div class="bc-role">Founder, Empora Group · Wellington · 18</div>
+        <p class="bc-p">Founded his first company at 15 and now runs Empora Group — a digital agency, a web &amp; product studio, and a SaaS build. He ships production web apps on Next.js and Vercel with structured data and clean analytics. <b>He isn't building for a demographic he has to research — he is the demographic.</b> That's the whole point of a youth tool built by youth.</p>
+        <div class="cred">
+          <div class="c"><div class="cv">3 ventures</div><div class="ck">Agency · web · SaaS</div></div>
+          <div class="c"><div class="cv">Live on Vercel</div><div class="ck">Apps shipped &amp; deployed</div></div>
+          <div class="c"><div class="cv">Next.js · Vercel</div><div class="ck">This project's stack</div></div>
+          <div class="c"><div class="cv">Founder at 15</div><div class="ck">Bootstrapped, in NZ</div></div>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="t-bar"><i></i><i></i><i></i><span class="t-name">empora — yea-skills-pathways</span></div>
+        <div class="t-body">
+          <span class="ln"><span class="c2">~/empora · yea-skills-pathways</span></span>
+          <span class="ln"><span class="pr">$</span> stack <span class="c2">— this project</span></span>
+          <span class="ln">  <span class="k">frontend</span> → Next.js + Vercel <span class="c2">// mobile-first, edge-fast</span></span>
+          <span class="ln">  <span class="k">data</span> → structured CMS + API <span class="c2">// no Excel, no VBA</span></span>
+          <span class="ln">  <span class="k">testing</span> → youth-in-the-loop <span class="c2">// every sprint</span></span>
+          <span class="ln"><span class="pr">$</span> who <span class="c2">— building it</span></span>
+          <span class="ln">  Logan Hempel · 18 · founder, Empora Group</span>
+          <span class="ln"><span class="ok">✓</span> ready to start Phase 1 on deposit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUTH BAND -->
+<section class="section" id="youth">
+  <div class="wrap">
+    <div class="band rv">
+      <span class="eyebrow">04 — Youth engagement · VUW hackathon</span>
+      <h2>It's about youth employment.<br>So youth help build it.</h2>
+      <p class="lead">We open the pilot with a hackathon at Victoria University of Wellington. Rangatahi generate ideas for the tool, and the standout few become a small core of 2–3 youth contributors on the testing team — through course-credit and volunteer pathways, so it stays light on the budget.</p>
+      <div class="yrole">
+        <div class="yr"><h4>A VUW hackathon</h4><p>Run through our Victoria University and the Atom connections. A day of youth energy that crowdsources real ideas and surfaces the people worth bringing on.</p></div>
+        <div class="yr"><h4>2–3 youth contributors</h4><p>A small core who run testing and reach NEETs peer-to-peer. Course-credit or volunteer pathways available — minimal cost, maximum authenticity.</p></div>
+        <div class="yr"><h4>Youth voice, every sprint</h4><p>The brief mandates embedded youth voice. The hackathon plus the core make it real and continuous — not a box ticked once.</p></div>
+      </div>
+      <div class="fund"><b>Near cost-neutral.</b> The hackathon can run through a VUW partnership and contributors via course credit — so youth engagement adds ideas, reach and credibility without a heavy line item. Still highly fundable (MYD, Simplicity) as a youth-employment initiative.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section" id="timeline" style="background:var(--bg-2)">
+  <div class="wrap">
+    <span class="eyebrow rv">05 — Phases &amp; timeline</span>
+    <h2 class="section-h2 rv">Built to ship early, then sharpen.</h2>
+    <p class="lead rv">Three phases, mapped to your scope. Something testable is in young people's hands inside the first window — then every round of feedback makes it better, through to handover.</p>
+    <div class="phases">
+      <div class="phase rv"><div class="p-n">Phase 1</div><h3>Concept &amp; prototype</h3><div class="p-d">Aug — Oct 2026</div><p>Product concept &amp; user-journey design · data architecture migrated off Excel · wireframes · early working prototype · first round of youth testing.</p></div>
+      <div class="phase rv d1"><div class="p-n">Phase 2</div><h3>Functional MVP</h3><div class="p-d">Nov — Dec 2026</div><p>Refined UX/UI from testing · functional MVP · CMS for non-technical staff · API integration · additional industries onboarded.</p></div>
+      <div class="phase rv d2"><div class="p-n">Phase 3</div><h3>Refine &amp; handover</h3><div class="p-d">Dec 2026 — Jan 2027</div><p>UX improvements from testing cycles · accessibility &amp; polish · full documentation · clean handover of product, data and CMS to YEA.</p></div>
+    </div>
+    <div class="rv d2">
+      <div class="bar"><span class="s1"></span><span class="s1"></span><span class="s1"></span><span class="s2"></span><span class="s2"></span><span class="s3"></span></div>
+      <div class="bar-l"><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan '27</span></div>
+      <div class="tl-note"><span class="d"></span>The youth core — recruited at the opening VUW hackathon — runs testing across all three phases, reaching NEETs peer-to-peer and feeding findings into every iteration.</div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT -->
+<section class="section" id="investment">
+  <div class="wrap">
+    <span class="eyebrow rv">06 — Investment</span>
+    <h2 class="section-h2 rv">Two clean lines, funded as you go.</h2>
+    <p class="lead rv">The build and the youth programme are priced separately, so each can be funded in its own tranche as your fundraising lands — and Phase 1 can start without waiting for the full budget.</p>
+    <div class="inv">
+      <div class="inv-card rv">
+        <div class="ic-l">A · Product build (phased)</div>
+        <div class="inv-row"><div class="r-t">Phase 1 — concept &amp; prototype<small>Architecture, journey, prototype, first testing</small></div><div class="r-v">$8,500</div></div>
+        <div class="inv-row"><div class="r-t">Phase 2 — functional MVP<small>Refined UX, CMS, API, more industries</small></div><div class="r-v">$7,500</div></div>
+        <div class="inv-row"><div class="r-t">Phase 3 — refine &amp; handover<small>Iteration, docs, handover to YEA</small></div><div class="r-v">$3,500</div></div>
+        <div class="inv-row total"><div class="r-t">Total build</div><div class="r-v">$19,500</div></div>
+      </div>
+      <div class="inv-card alt rv d1">
+        <div class="ic-l">B · Youth engagement (lean)</div>
+        <div class="inv-row"><div class="r-t">VUW hackathon — run, venue, prizes<small>Partnered with VUW; ideas + recruitment</small></div><div class="r-v">~$1,200</div></div>
+        <div class="inv-row"><div class="r-t">2–3 youth contributors<small>Course-credit / volunteer · optional small stipend</small></div><div class="r-v">$0–500</div></div>
+        <div class="inv-row total"><div class="r-t">Total programme</div><div class="r-v">~$1,500</div></div>
+      </div>
+    </div>
+    <div class="inv-meta rv d1">
+      <div class="im"><div class="im-l">Payment</div><p>50% deposit to begin each phase, balance on sign-off. The youth line is small and runs alongside — or can be funded separately.</p></div>
+      <div class="im"><div class="im-l">Running costs</div><p>Hosting + data ≈ NZ$0–80/month during the pilot. Optional post-handover maintenance — or full handover, no ongoing cost.</p></div>
+      <div class="im"><div class="im-l">Fits the $10k assigned</div><p>Phase 1 ($8,500) + youth engagement ($1,500) = <b style="color:var(--ink)">exactly $10,000</b> — the budget already in place. Work starts now, before any further funding lands.</p></div>
+    </div>
+    <div class="pricepanel rv">
+      <div class="pp-l">Why this is the right number</div>
+      <div class="pp-grid">
+        <div class="pp"><div class="pp-v">~$25k</div><div class="pp-k">Muka Tangata's own benchmark for a custom-built MVP</div></div>
+        <div class="pp"><div class="pp-v">$19,500</div><div class="pp-k">Our custom build — 22% under that benchmark, phased</div></div>
+        <div class="pp"><div class="pp-v">$0/mo</div><div class="pp-k">Licensing — vs the low-code route's ongoing per-seat fees</div></div>
+      </div>
+      <p class="pp-note">Muka Tangata's own business case priced a custom app at <b>~$25k</b>, and the low-code DIY route at <b>~$9.5k + $3–5k polish</b> <em>plus</em> ongoing per-seat licensing. We deliver the <b>custom</b> build they called the preferred long-term option — owned outright, no licensing trap, scalable — at <b>$19,500</b>. Add the lean youth programme and the <b>whole thing is ~$21,000 — still under the $25k benchmark, with the youth engagement effectively free</b>. And Phase 1 begins inside the $10k already assigned. Delivery risk is low: it's the stack we ship every week, built fast, with a working prototype already on this page.</p>
+    </div>
+    <div class="gst rv">All figures NZD, exclusive of GST. Youth-engagement costs indicative — the hackathon partnership and course-credit pathway are confirmed with VUW before Phase 1.</div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section" id="why" style="background:var(--bg-2)">
+  <div class="wrap">
+    <span class="eyebrow rv">07 — Why Empora Ventures</span>
+    <h2 class="section-h2 rv">Closest to the data. Closest to the kids.</h2>
+    <div class="why">
+      <div class="wu rv"><div class="w-n">01</div><div><h4>Both sides in one team</h4><p>Build and youth voice under one roof — no handoffs, no translation loss between who makes it and who tests it.</p></div></div>
+      <div class="wu rv d1"><div class="w-n">02</div><div><h4>The exact stack, already running</h4><p>Next.js and Vercel are our daily tools. No enterprise overhead, no learning curve billed to YEA.</p></div></div>
+      <div class="wu rv"><div class="w-n">03</div><div><h4>Lean, built for your budget</h4><p>Priced and structured around the funding reality — start small, scale as money lands.</p></div></div>
+      <div class="wu rv d1"><div class="w-n">04</div><div><h4>Local and accountable</h4><p>One Wellington point of contact who answers for the work, end to end, through handover.</p></div></div>
+    </div>
+    <div class="gov rv d1">
+      <div class="g-l">Transparency &amp; governance</div>
+      <p>Logan's two hats — YEA Youth Lead and Empora Ventures — are managed openly. The Chair has invited competing pitches, so the process is clean. <b>Logan recuses himself from YEA's vendor-selection decision</b>, the Director holds the vendor relationship, and the roles stay separate: YEA owns testing governance and sign-off, Empora Ventures delivers the build.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="wrap">
+    <span class="eyebrow rv" style="justify-content:center;display:inline-flex">Next</span>
+    <h2 class="rv">Let's build the thing that actually reaches them.</h2>
+    <p class="lead rv d1">Confirm the shortlist and we'll lock Phase 1 detail on a 30-minute call — prototype in youth hands inside the first window.</p>
+    <div class="cta-row rv d1">
+      <a href="mailto:logan@emporom.org" class="btn btn-lime">Email Logan →</a>
+      <a href="#opportunity" class="btn btn-ghost">Back to top</a>
+    </div>
+    <div class="steps">
+      <div class="step rv"><div class="s-n">1</div><p>YEA confirms the shortlist and a yes-in-principle.</p></div>
+      <div class="step rv d1"><div class="s-n">2</div><p>30-minute scoping call to lock Phase 1 detail.</p></div>
+      <div class="step rv d2"><div class="s-n">3</div><p>Confirm the hackathon + course-credit pathway with VUW.</p></div>
+      <div class="step rv d3"><div class="s-n">4</div><p>Phase 1 begins on deposit — prototype in youth hands.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>
+      <span class="wordmark foot-wordmark" aria-label="Empora Ventures">EMPORA <b>VENTURES</b></span>
+      <div class="foot-c" style="margin-top:14px;color:var(--muted);font-size:14px"><a href="mailto:logan@emporom.org">logan@emporom.org</a> · Wellington, Aotearoa</div>
+    </div>
+    <div class="foot-meta">
+      Proposal · YEA × Empora Ventures<br>
+      Youth Skills Pathways Pilot<br>
+      Prepared June 2026
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+const prog=document.getElementById('progress');
+const cur=document.getElementById('cursor');
+addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',scrollY>40);
+  const h=document.documentElement, max=h.scrollHeight-h.clientHeight;
+  prog.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+},{passive:true});
+// reveal
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.16,rootMargin:'0px 0px -7% 0px'});
+document.querySelectorAll('.rv,.statement,.schematic,.builder-grid').forEach(el=>io.observe(el));
+// count-up
+const cio=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){count(e.target);cio.unobserve(e.target);}})},{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+function count(el){const t=+el.dataset.count,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'',d=1300,s=performance.now();(function f(n){let p=Math.min((n-s)/d,1);p=1-Math.pow(1-p,3);el.textContent=pre+Math.round(t*p).toLocaleString()+suf;if(p<1)requestAnimationFrame(f)})(s)}
+// smooth cursor
+let cx=innerWidth/2,cy=innerHeight/2,tx=cx,ty=cy;
+addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY},{passive:true});
+(function loop(){cx+=(tx-cx)*.2;cy+=(ty-cy)*.2;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.tile,.card,.phase,.jstep,.inv-card,.cred .c').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('big'));el.addEventListener('mouseleave',()=>cur.classList.remove('big'))});
+</script>
+</body>
+</html>
